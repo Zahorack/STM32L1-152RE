@@ -22,10 +22,17 @@ namespace Control
 		};
 	}
 
+	typedef struct {
+	        uint16_t x;
+	        uint16_t y;
+	}__attribute__((packed)) axe_t;
+
+
 	struct __attribute__((packed)) PacketHeader {
-		uint32_t id;
-		PacketType::Enum type;
+	        uint32_t id;
+	        PacketType::Enum type;
 	};
+
 
 	struct __attribute__((packed)) NackPacket {
 	};
@@ -39,15 +46,12 @@ namespace Control
 	};
 
 	struct __attribute__((packed)) ManualControlPacket {
-		uint8_t
-			x,
-			y,
-			pot,
-			buttonLeft,
-			buttonRight,
-			state,
-			mode;
+		axe_t 	joystickData;
 	};
+
+	typedef struct {
+	        axe_t joystickData;
+	} __attribute__((packed)) controlData_t;
 
 	union PacketContents {
 		NackPacket nackPacket;
@@ -58,9 +62,11 @@ namespace Control
 
 	using Crc = uint8_t;
 
+
 	class Packet {
+
 	public:
-		static constexpr uint16_t Mark = 0x4B6B;
+		static constexpr uint16_t Mark = 0x4B4C;
 
 		PacketHeader header;
 		PacketContents contents;

@@ -16,6 +16,7 @@ namespace Usarts {
 enum Enum : uint8_t {
 	Usart1 = 0,
 	Usart2,
+	Usart3,
 	/*
 	Usart3,
 	Uart4,

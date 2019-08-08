@@ -11,6 +11,7 @@ RM := rm -rf
 -include startup/subdir.mk
 -include src/Util/subdir.mk
 -include src/Periph/subdir.mk
+-include src/Control/subdir.mk
 -include src/Container/subdir.mk
 -include src/subdir.mk
 -include Utilities/STM32L1xx_Nucleo/subdir.mk

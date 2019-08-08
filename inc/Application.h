@@ -14,8 +14,9 @@
 #include "Periph/Led.h"
 #include "Periph/Usart.h"
 #include "Util/Logger.h"
-#include "Periph/Engine.h"
 
+#include "Control/Control.h"
+#include "Util/Communication.h"
 
 class Application {
 	static Application *m_instance;
@@ -27,9 +28,11 @@ class Application {
 
 
 public:
+	Control::Control control;
+	Control::Communication communication;
+
 	Util::Logger logger;
 	Periph::Usart usartLog;
-	Periph::Engine m_engine;
 
 private:
 	Periph::Led m_appRunningLed;

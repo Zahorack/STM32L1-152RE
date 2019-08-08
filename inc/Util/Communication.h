@@ -17,7 +17,7 @@ namespace Control
 {
 	static constexpr uint16_t
 		JostickQuadrantOffset = 70,
-		JoystickMiddle = 500,
+		JoystickMiddle = 100,
 		JoystickTreshold = 7;
 
 	class Communication {
@@ -42,7 +42,8 @@ namespace Control
 		void waitForNextPacket();
 		void readPacketHeader();
 		Container::Result<Packet> readPacketContents();
-		bool checkCrc();
+		bool checkHeaderCrc();
+		bool checkDataCrc();
 	};
 }
 #endif /* UTIL_PACKET_H_ */

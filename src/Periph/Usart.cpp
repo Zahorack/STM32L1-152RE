@@ -39,7 +39,15 @@ struct {
 		irqn: USART1_IRQn
 	},
 	/* Usart2 */ {
-		gpio: GPIOB,
+		gpio: GPIOA,
+		rx: GPIO_PIN_3,
+		tx: GPIO_PIN_2,
+		gpioAf: GPIO_AF7_USART2,
+		usart: USART2,
+		irqn: USART2_IRQn
+	},
+	/* Usart3 */ {
+		gpio: GPIOC,
 		rx: GPIO_PIN_11,
 		tx: GPIO_PIN_10,
 		gpioAf: GPIO_AF7_USART3,
@@ -55,6 +63,9 @@ void Usart::initRcc()
 			__USART1_CLK_ENABLE();
 			break;
 		case Usarts::Usart2:
+			__USART2_CLK_ENABLE();
+			break;
+		case Usarts::Usart3:
 			__USART3_CLK_ENABLE();
 			break;
 
@@ -67,8 +78,8 @@ void Usart::initGpio()
 {
 	if(config[id].gpio == GPIOA)
 		__GPIOA_CLK_ENABLE();
-	else if(config[id].gpio == GPIOD)
-		__GPIOD_CLK_ENABLE();
+	else if(config[id].gpio == GPIOC)
+		__GPIOC_CLK_ENABLE();
 
 	GPIO_InitTypeDef gpioInitStruct = {
 		.Pin = config[id].rx | config[id].tx,
@@ -214,24 +225,46 @@ uint32_t Usart::bytesAvailable() const
 } /* namespace Periph */
 
 
-void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *ref)
 {
-    if (huart == &huart[Periph::Usarts::Usart1]) {
-       // do something with rx_data
+	if (ref == &Periph::huart[Periph::Usarts::Usart1]) {
+		// do something with rx_data
+		//TRACE("UART1");
+		Periph::s_readQueues[Periph::Usarts::Usart1].enqueue(static_cast<uint8_t>(Periph::rxByte[Periph::Usarts::Usart1]));
+		HAL_UART_Receive_IT(&Periph::huart[Periph::Usarts::Usart1], &Periph::rxByte[Periph::Usarts::Usart1], 1);
+	}
 
-       Periph::s_readQueues[Periph::Usarts::Usart1].enqueue(static_cast<uint8_t>(Periph::rxByte[Periph::Usarts::Usart1]));
-       HAL_UART_Receive_IT(&huart[Periph::Usarts::Usart1], &Periph::rxByte[Periph::Usarts::Usart1], 1);
-    }
+
+//	if (ref == &Periph::huart[Periph::Usarts::Usart2]) {
+//		// do something with rx_data
+//
+//		Periph::s_readQueues[Periph::Usarts::Usart2].enqueue(static_cast<uint8_t>(Periph::rxByte[Periph::Usarts::Usart2]));
+//		HAL_UART_Receive_IT(&Periph::huart[Periph::Usarts::Usart2], &Periph::rxByte[Periph::Usarts::Usart2], 1);
+//	}
+
+	if (ref == &Periph::huart[Periph::Usarts::Usart3]) {
+		// do something with rx_data
+		//TRACE("UART3");
+//		Periph::s_readQueues[Periph::Usarts::Usart3].enqueue(static_cast<uint8_t>(Periph::rxByte[Periph::Usarts::Usart3]));
+//		HAL_UART_Receive_IT(&Periph::huart[Periph::Usarts::Usart3], &Periph::rxByte[Periph::Usarts::Usart3], 1);
+	}
 
 }
 
 
 void USART1_IRQHandler(void) {
+	//TRACE("USART1_IRQHandler");
 	HAL_UART_IRQHandler(&Periph::huart[Periph::Usarts::Usart1]);
 }
 
+//
+//void USART2_IRQHandler()
+//{
+//	HAL_UART_IRQHandler(&Periph::huart[Periph::Usarts::Usart2]);
+//}
 
-void USART2_IRQHandler()
+void USART3_IRQHandler()
 {
-	HAL_UART_IRQHandler(&Periph::huart[Periph::Usarts::Usart2]);
+	//TRACE("USART3_IRQHandler");
+	HAL_UART_IRQHandler(&Periph::huart[Periph::Usarts::Usart3]);
 }

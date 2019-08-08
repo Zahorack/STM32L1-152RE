@@ -56,11 +56,11 @@ static constexpr struct {
 	{
 		{ /* Dir pin 1 */
 				port: GPIOC,
-				id: GPIO_PIN_1
+				id: GPIO_PIN_0
 		},
 		{ /* Dir pin 2 */
 				port: GPIOC,
-				id: GPIO_PIN_0
+				id: GPIO_PIN_1
 		},
 	}
 };

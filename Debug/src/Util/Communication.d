@@ -1,5 +1,6 @@
 src/Util/Communication.o: ../src/Util/Communication.cpp \
  C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/Communication.h \
+ C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Container/Result.h \
  C:/Users/Oliver/Documents/workspace/STM32L1-152RE/CMSIS/device/stm32l1xx.h \
  C:/Users/Oliver/Documents/workspace/STM32L1-152RE/CMSIS/device/stm32l152xe.h \
  C:/Users/Oliver/Documents/workspace/STM32L1-152RE/CMSIS/core/core_cm3.h \
@@ -54,10 +55,12 @@ src/Util/Communication.o: ../src/Util/Communication.cpp \
  C:/Users/Oliver/Documents/workspace/STM32L1-152RE/HAL_Driver/Inc/stm32l1xx_hal_pcd.h \
  C:/Users/Oliver/Documents/workspace/STM32L1-152RE/HAL_Driver/Inc/stm32l1xx_hal_pcd_ex.h \
  C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/Usart.h \
- C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/Packet.h \
+ C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Control/Packet.h \
  C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/Trace.h
 
 C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/Communication.h:
+
+C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Container/Result.h:
 
 C:/Users/Oliver/Documents/workspace/STM32L1-152RE/CMSIS/device/stm32l1xx.h:
 
@@ -167,6 +170,6 @@ C:/Users/Oliver/Documents/workspace/STM32L1-152RE/HAL_Driver/Inc/stm32l1xx_hal_p
 
 C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/Usart.h:
 
-C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/Packet.h:
+C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Control/Packet.h:
 
 C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/Trace.h:

@@ -29,6 +29,7 @@ HAL_Driver/Src \
 Utilities/STM32L1xx_Nucleo \
 src \
 src/Container \
+src/Control \
 src/Periph \
 src/Util \
 startup \

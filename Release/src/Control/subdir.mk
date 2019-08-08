@@ -4,29 +4,23 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
-../src/Util/Communication.cpp \
-../src/Util/Logger.cpp \
-../src/Util/Packet.cpp \
-../src/Util/Timer.cpp \
-../src/Util/Trace.cpp 
+../src/Control/Control.cpp \
+../src/Control/ManualMode.cpp \
+../src/Control/Packet.cpp 
 
 OBJS += \
-./src/Util/Communication.o \
-./src/Util/Logger.o \
-./src/Util/Packet.o \
-./src/Util/Timer.o \
-./src/Util/Trace.o 
+./src/Control/Control.o \
+./src/Control/ManualMode.o \
+./src/Control/Packet.o 
 
 CPP_DEPS += \
-./src/Util/Communication.d \
-./src/Util/Logger.d \
-./src/Util/Packet.d \
-./src/Util/Timer.d \
-./src/Util/Trace.d 
+./src/Control/Control.d \
+./src/Control/ManualMode.d \
+./src/Control/Packet.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
-src/Util/%.o: ../src/Util/%.cpp
+src/Control/%.o: ../src/Control/%.cpp
 	@echo 'Building file: $<'
 	@echo 'Invoking: MCU G++ Compiler'
 	@echo $(PWD)

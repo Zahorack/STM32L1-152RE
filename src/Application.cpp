@@ -18,8 +18,7 @@ Application::ApplicationInitializator::ApplicationInitializator(Application *par
 Application::Application() :
 	m_applicationInitializator(this),
 	logger(&usartLog),
-	usartLog(Periph::Usarts::Usart1, 9600),
-	m_engine(Periph::Engines::M1),
+	usartLog(Periph::Usarts::Usart3, 9600),
 	m_appRunningLed(Periph::Leds::Green)
 {
 	HAL_Init();
@@ -29,11 +28,12 @@ Application::Application() :
 
 void Application::run()
 {
+	m_appRunningLed.turnOn();
 	INF_LOG("Application started running.");
 
-	m_appRunningLed.turnOn();
 
-//m_engine.setTargetSpeed(80);
+
+	//communication.sendStatus();
 
 	Util::Timer timer(Util::Time::FromMilliSeconds(100));
 	timer.start();
@@ -41,15 +41,17 @@ void Application::run()
 	/* @non-terminating@ */
 	for(;;) {
 
-		m_engine.update();
-		//TRACE("a");
+		Container::Result<Control::Packet> communicationResult = communication.update();
+
+		if(communicationResult.isValid && communicationResult.value.header.type == Control::PacketType::ManualControl)
+			control.setControlData(communicationResult.value.contents.dataPacket);
+
+		control.update();
+
 		if(timer.run()) {
-			m_appRunningLed.toggle();
-			usartLog.write('c');
+			communication.sendStatus();
+			INF_LOG("Tick");
 		}
-
-		//usartLog.write('c');
-
 	}
 
 	INF_LOG("Application ended.");

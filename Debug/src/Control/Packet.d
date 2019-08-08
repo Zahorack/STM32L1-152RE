@@ -1,5 +1,5 @@
-src/Util/Control.o: ../src/Util/Control.cpp \
- C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/Trace.h \
+src/Control/Packet.o: ../src/Control/Packet.cpp \
+ C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Control/Packet.h \
  C:/Users/Oliver/Documents/workspace/STM32L1-152RE/CMSIS/device/stm32l1xx.h \
  C:/Users/Oliver/Documents/workspace/STM32L1-152RE/CMSIS/device/stm32l152xe.h \
  C:/Users/Oliver/Documents/workspace/STM32L1-152RE/CMSIS/core/core_cm3.h \
@@ -52,27 +52,9 @@ src/Util/Control.o: ../src/Util/Control.cpp \
  C:/Users/Oliver/Documents/workspace/STM32L1-152RE/HAL_Driver/Inc/stm32l1xx_hal_smartcard.h \
  C:/Users/Oliver/Documents/workspace/STM32L1-152RE/HAL_Driver/Inc/stm32l1xx_hal_wwdg.h \
  C:/Users/Oliver/Documents/workspace/STM32L1-152RE/HAL_Driver/Inc/stm32l1xx_hal_pcd.h \
- C:/Users/Oliver/Documents/workspace/STM32L1-152RE/HAL_Driver/Inc/stm32l1xx_hal_pcd_ex.h \
- C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/Control.h \
- C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/Engine.h \
- C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/DigitalOutputPin.h \
- C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/RefCounter.h \
- C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/Pwm.h \
- C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/Usart.h \
- C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/Servo.h \
- C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/Tool.h \
- C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/Timer.h \
- C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/Time.h \
- C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/SysTickCounter.h \
- C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/Packet.h \
- C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Application.h \
- C:/Users/Oliver/Documents/workspace/STM32L1-152RE/Utilities/STM32L1xx_Nucleo/stm32l1xx_nucleo.h \
- C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/Led.h \
- C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/Usart.h \
- C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/Logger.h \
- C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/Engine.h
+ C:/Users/Oliver/Documents/workspace/STM32L1-152RE/HAL_Driver/Inc/stm32l1xx_hal_pcd_ex.h
 
-C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/Trace.h:
+C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Control/Packet.h:
 
 C:/Users/Oliver/Documents/workspace/STM32L1-152RE/CMSIS/device/stm32l1xx.h:
 
@@ -179,39 +161,3 @@ C:/Users/Oliver/Documents/workspace/STM32L1-152RE/HAL_Driver/Inc/stm32l1xx_hal_w
 C:/Users/Oliver/Documents/workspace/STM32L1-152RE/HAL_Driver/Inc/stm32l1xx_hal_pcd.h:
 
 C:/Users/Oliver/Documents/workspace/STM32L1-152RE/HAL_Driver/Inc/stm32l1xx_hal_pcd_ex.h:
-
-C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/Control.h:
-
-C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/Engine.h:
-
-C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/DigitalOutputPin.h:
-
-C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/RefCounter.h:
-
-C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/Pwm.h:
-
-C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/Usart.h:
-
-C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/Servo.h:
-
-C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/Tool.h:
-
-C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/Timer.h:
-
-C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/Time.h:
-
-C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/SysTickCounter.h:
-
-C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/Packet.h:
-
-C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Application.h:
-
-C:/Users/Oliver/Documents/workspace/STM32L1-152RE/Utilities/STM32L1xx_Nucleo/stm32l1xx_nucleo.h:
-
-C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/Led.h:
-
-C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/Usart.h:
-
-C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/Logger.h:
-
-C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/Engine.h:

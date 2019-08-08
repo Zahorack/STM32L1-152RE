@@ -6,11 +6,12 @@
  */
 
 #include "Util/Communication.h"
+#include "Util/Trace.h"
 
 namespace Control
 {
 	Communication::Communication() :
-		m_rfModule(Periph::Usarts::Usart2, 9600)
+		m_rfModule(Periph::Usarts::Usart1, 57600)
 	{}
 
 	Container::Result<Packet> Communication::update()
@@ -51,22 +52,23 @@ namespace Control
 		if(m_rfModule.bytesAvailable() >= sizeof(PacketHeader) + sizeof(Crc)) {
 			m_rfModule.readStruct(m_currentPacket.header);
 
-			if(checkCrc())
+			if(checkHeaderCrc()) {
 				m_state = ReadingPacketContents;
+			}
+			else {
+				TRACE("Header CRC ERROR\n\r");
+			}
 		}
 	}
 
 	Container::Result<Packet> Communication::readPacketContents()
 	{
 		if(m_rfModule.bytesAvailable() >= Packet::SizeForType(m_currentPacket.header.type) + sizeof(Crc)) {
-			m_rfModule.readBytes(
-					reinterpret_cast<uint8_t *>(&m_currentPacket.contents),
-					Packet::SizeForType(m_currentPacket.header.type)
-			);
+			//m_rfModule.readStruct(m_currentPacket.contents);
+			m_rfModule.readBytes(reinterpret_cast<uint8_t *>(&m_currentPacket.contents), Packet::SizeForType(m_currentPacket.header.type));
 
-			if(checkCrc()) {
+			if(/*Packet::SizeForType(m_currentPacket.header.type) && */checkDataCrc()) {
 				m_state = WaitingForNextPacket;
-
 				return Container::Result<Packet>(m_currentPacket);
 			}
 		}
@@ -74,11 +76,34 @@ namespace Control
 		return Container::Result<Packet>();
 	}
 
-	bool Communication::checkCrc()
+	bool Communication::checkHeaderCrc()
 	{
 		Crc crc = m_rfModule.read();
 
 		if(crc != Packet::CalculateCRC8(m_currentPacket.header)) {
+			const PacketHeader nackPacket = {
+					.id = m_currentPacket.header.id,
+					.type = PacketType::Nack
+			};
+
+			m_rfModule.writeStruct(nackPacket);
+
+			m_state = WaitingForNextPacket;
+
+			return false;
+		}
+
+		return true;
+	}
+
+	bool Communication::checkDataCrc()
+	{
+		Crc crc = m_rfModule.read();
+
+		if(crc != Packet::CalculateCRC8(m_currentPacket.contents.dataPacket)) {
+			TRACE("DATA CRC ERRO -- RX CRC = %d   ", crc);
+			TRACE("CRC = %d\n\r", Packet::CalculateCRC8(m_currentPacket.contents.dataPacket));
+
 			const PacketHeader nackPacket = {
 					.id = m_currentPacket.header.id,
 					.type = PacketType::Nack

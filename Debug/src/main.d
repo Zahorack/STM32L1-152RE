@@ -58,10 +58,21 @@ src/main.o: ../src/main.cpp \
  C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/Usart.h \
  C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/Logger.h \
  C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/Usart.h \
+ C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Control/Control.h \
  C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/Engine.h \
  C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/DigitalOutputPin.h \
  C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/RefCounter.h \
- C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/Pwm.h
+ C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/Pwm.h \
+ C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/Servo.h \
+ C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/Tool.h \
+ C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/Timer.h \
+ C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/Time.h \
+ C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/SysTickCounter.h \
+ C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Control/ManualMode.h \
+ C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/Communication.h \
+ C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Container/Result.h \
+ C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Control/Packet.h \
+ C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/Communication.h
 
 C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Application.h:
 
@@ -181,6 +192,8 @@ C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/Logger.h:
 
 C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/Usart.h:
 
+C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Control/Control.h:
+
 C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/Engine.h:
 
 C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/DigitalOutputPin.h:
@@ -188,3 +201,23 @@ C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/DigitalOutputPin.h:
 C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/RefCounter.h:
 
 C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/Pwm.h:
+
+C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/Servo.h:
+
+C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/Tool.h:
+
+C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/Timer.h:
+
+C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/Time.h:
+
+C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/SysTickCounter.h:
+
+C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Control/ManualMode.h:
+
+C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/Communication.h:
+
+C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Container/Result.h:
+
+C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Control/Packet.h:
+
+C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/Communication.h:
