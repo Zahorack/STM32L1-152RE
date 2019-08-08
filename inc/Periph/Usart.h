@@ -49,6 +49,16 @@ public:
 	uint32_t readBytes(uint8_t *buffer, uint32_t maxSize);
 	bool Available() const;
 	uint32_t bytesAvailable() const;
+
+	template<typename T>
+	void readStruct(T &buffer) {
+		readBytes(reinterpret_cast<uint8_t *>(&buffer), sizeof(T));
+	}
+
+	template<typename T>
+	void writeStruct(const T &buffer) {
+		write(reinterpret_cast<const uint8_t *>(&buffer), sizeof(T));
+	}
 };
 
 } /* namespace Periph */

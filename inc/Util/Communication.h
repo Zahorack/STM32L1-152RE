@@ -8,32 +8,41 @@
 #ifndef UTIL_COMMUNICATION_H_
 #define UTIL_COMMUNICATION_H_
 
+#include <Container/Result.h>
 #include "stm32l1xx.h"
 #include "Periph/Usart.h"
-#include "Util/Packet.h"
+#include "Control/Packet.h"
 
-namespace Util {
+namespace Control
+{
+	static constexpr uint16_t
+		JostickQuadrantOffset = 70,
+		JoystickMiddle = 500,
+		JoystickTreshold = 7;
 
+	class Communication {
+		Periph::Usart m_rfModule;
 
+		enum State {
+			WaitingForNextPacket,
+			ReadingPacketHeader,
+			ReadingPacketContents
+		};
 
-class Communication {
+		State m_state = WaitingForNextPacket;
+		Packet m_currentPacket;
 
-	Periph::Usart m_rfModule;
-	Util::Packet  m_packet;
-public:
-	Communication();
-	~Communication();
+	public:
+		Communication();
 
-	void start();
-	void run();
+		Container::Result<Packet> update();
+		void sendStatus();
 
-	void parse();
-	void sendStatus();
-
-};
-
-
+	private:
+		void waitForNextPacket();
+		void readPacketHeader();
+		Container::Result<Packet> readPacketContents();
+		bool checkCrc();
+	};
 }
 #endif /* UTIL_PACKET_H_ */
-
-
