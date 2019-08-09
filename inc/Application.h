@@ -28,11 +28,13 @@ class Application {
 
 
 public:
+	Util::Logger logger;
+	Periph::Usart usartLog;
+
 	Control::Control control;
 	Control::Communication communication;
 
-	Util::Logger logger;
-	Periph::Usart usartLog;
+
 
 private:
 	Periph::Led m_appRunningLed;

@@ -163,7 +163,7 @@ HAL_StatusTypeDef HAL_Init(void)
   HAL_NVIC_SetPriorityGrouping(NVIC_PRIORITYGROUP_4);
 
   /* Use systick as time base source and configure 1ms tick (default clock after Reset is MSI) */
-  HAL_InitTick(TICK_INT_PRIORITY);
+  //HAL_InitTick(TICK_INT_PRIORITY);
 
   /* Init the low level hardware */
   HAL_MspInit();
@@ -237,14 +237,20 @@ __weak void HAL_MspDeInit(void)
   */
 __weak HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
 {
-  /*Configure the SysTick to have interrupt in 1ms time basis*/
-  HAL_SYSTICK_Config(SystemCoreClock /1000);
+	/*Configure the SysTick to have interrupt in 1ms time basis*/
 
-  /*Configure the SysTick IRQ priority */
-  HAL_NVIC_SetPriority(SysTick_IRQn, TickPriority ,0);
 
-   /* Return function status */
-  return HAL_OK;
+	if(HAL_SYSTICK_Config(SystemCoreClock /1000) == 0) {
+		TRACE("Systick init success\n\r");
+	}
+	else {
+		TRACE("Systick init error\n\r");
+	}
+	/*Configure the SysTick IRQ priority */
+	HAL_NVIC_SetPriority(SysTick_IRQn, TickPriority ,0);
+
+	/* Return function status */
+	return HAL_OK;
 }
 
 /**

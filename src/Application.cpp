@@ -23,7 +23,6 @@ Application::Application() :
 {
 	HAL_Init();
 	SystemCoreClockUpdate();
-
 }
 
 void Application::run()
@@ -35,7 +34,7 @@ void Application::run()
 
 	//communication.sendStatus();
 
-	Util::Timer timer(Util::Time::FromMilliSeconds(100));
+	Util::Timer timer(Util::Time::FromMilliSeconds(2000));
 	timer.start();
 
 	/* @non-terminating@ */
@@ -49,8 +48,9 @@ void Application::run()
 		control.update();
 
 		if(timer.run()) {
-			communication.sendStatus();
-			INF_LOG("Tick");
+			//communication.sendStatus();
+			//INF_LOG("Tick");
+			TRACE("Tick\n\r");
 		}
 	}
 

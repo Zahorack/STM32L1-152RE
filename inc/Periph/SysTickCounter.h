@@ -19,7 +19,7 @@ class SysTickCounter {
 public:
 	SysTickCounter();
 
-	micros_t microsSinceLastReset() const;
+	micros_t millisSinceLastReset() const;
 	Util::Time sinceLastReset() const;
 };
 

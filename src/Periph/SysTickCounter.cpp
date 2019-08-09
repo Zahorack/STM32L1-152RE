@@ -10,40 +10,45 @@
 
 namespace Periph {
 
-static volatile micros_t s_microsSinceLastReset;
+static volatile micros_t s_millisSinceLastReset;
 static bool s_wasInitialized = false;
 
 void SysTickCounter::init()
 {
-	uint32_t cfg = (uint32_t)(SystemCoreClock / 100000);
-	while(SysTick_Config(cfg)!= 0)
-	{}
+	TRACE("Systick init start\n\r");
+
+	if(SysTick_Config((uint32_t)(HAL_RCC_GetHCLKFreq() / 1000)) == 0) {
+		TRACE("Systick init success\n\r");
+	}
+	else {
+		TRACE("Systick init error\n\r");
+	}
 }
 
 SysTickCounter::SysTickCounter()
 {
 	if(!s_wasInitialized) {
 		init();
-		s_microsSinceLastReset = 0;
+		s_millisSinceLastReset = 0;
 
 		s_wasInitialized = true;
 	}
 }
 
-micros_t SysTickCounter::microsSinceLastReset() const
+micros_t SysTickCounter::millisSinceLastReset() const
 {
-	return s_microsSinceLastReset;
+	return s_millisSinceLastReset;
 }
 
 Util::Time SysTickCounter::sinceLastReset() const
 {
-	return Util::Time::FromMicroSeconds(microsSinceLastReset());
+	return Util::Time::FromMilliSeconds(millisSinceLastReset());
 }
 
 } /* namespace Periph */
 
 void SysTick_Handler(void)
 {
-	//TRACE("a");
-	++Periph::s_microsSinceLastReset;
+	++Periph::s_millisSinceLastReset;
+	//TRACE("%u\n\r", Periph::s_millisSinceLastReset);
 }
