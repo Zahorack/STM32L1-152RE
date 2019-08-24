@@ -14,6 +14,7 @@
 #include "Periph/Led.h"
 #include "Periph/Usart.h"
 #include "Util/Logger.h"
+#include "Util/Bms.h"
 
 #include "Control/Control.h"
 #include "Util/Communication.h"
@@ -33,6 +34,7 @@ public:
 
 	Control::Control control;
 	Control::Communication communication;
+	Util::Bms bms;
 
 private:
 	Periph::Led m_appRunningLed;

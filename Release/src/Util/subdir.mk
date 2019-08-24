@@ -4,6 +4,7 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
+../src/Util/Bms.cpp \
 ../src/Util/Communication.cpp \
 ../src/Util/Logger.cpp \
 ../src/Util/Packet.cpp \
@@ -11,6 +12,7 @@ CPP_SRCS += \
 ../src/Util/Trace.cpp 
 
 OBJS += \
+./src/Util/Bms.o \
 ./src/Util/Communication.o \
 ./src/Util/Logger.o \
 ./src/Util/Packet.o \
@@ -18,6 +20,7 @@ OBJS += \
 ./src/Util/Trace.o 
 
 CPP_DEPS += \
+./src/Util/Bms.d \
 ./src/Util/Communication.d \
 ./src/Util/Logger.d \
 ./src/Util/Packet.d \

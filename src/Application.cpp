@@ -46,12 +46,14 @@ void Application::run()
 			control.setControlData(communicationResult.value.contents.dataPacket);
 
 		control.update();
+		bms.update();
 
 		if(timer.run()) {
 			//communication.sendStatus();
 			//INF_LOG("Tick");
 			TRACE("Tick\n\r");
 		}
+
 	}
 
 	INF_LOG("Application ended.");

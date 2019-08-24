@@ -17,8 +17,8 @@ namespace Control
 			Periph::Engine m_engine_left, Periph::Engine m_engine_right
 			)
 	{
-		TRACE("y: %d", controlData.joystickData.y);
-		TRACE("x: %d \n\r", controlData.joystickData.x);
+//		TRACE("y: %d", controlData.joystickData.y);
+//		TRACE("x: %d \n\r", controlData.joystickData.x);
 
 		uint8_t leftSpeed = 0, rightSpeed = 0;
 
@@ -42,8 +42,8 @@ namespace Control
 		}
 
 
-		leftSpeed = Util::clamp<uint8_t>(Util::map<uint8_t>(leftSpeed, 0, 100, 45, 60), 0, 100);
-		rightSpeed = Util::clamp<uint8_t>(Util::map<uint8_t>(rightSpeed, 0, 100, 45, 60), 0, 100);
+		leftSpeed = Util::clamp<uint8_t>(Util::map<uint8_t>(leftSpeed, 0, 100, 50, 95), 0, 100);
+		rightSpeed = Util::clamp<uint8_t>(Util::map<uint8_t>(rightSpeed, 0, 100, 50, 95), 0, 100);
 
 
 		m_engine_left.setTargetSpeed(leftSpeed > 55 ? leftSpeed : 0);
