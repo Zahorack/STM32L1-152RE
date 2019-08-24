@@ -55,6 +55,9 @@ src/Periph/Engine.o: ../src/Periph/Engine.cpp \
  C:/Users/Oliver/Documents/workspace/STM32L1-152RE/HAL_Driver/Inc/stm32l1xx_hal_pcd.h \
  C:/Users/Oliver/Documents/workspace/STM32L1-152RE/HAL_Driver/Inc/stm32l1xx_hal_pcd_ex.h \
  C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/RefCounter.h \
+ C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/Timer.h \
+ C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/Time.h \
+ C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/SysTickCounter.h \
  C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/Pwm.h \
  C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/State.h
 
@@ -169,6 +172,12 @@ C:/Users/Oliver/Documents/workspace/STM32L1-152RE/HAL_Driver/Inc/stm32l1xx_hal_p
 C:/Users/Oliver/Documents/workspace/STM32L1-152RE/HAL_Driver/Inc/stm32l1xx_hal_pcd_ex.h:
 
 C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/RefCounter.h:
+
+C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/Timer.h:
+
+C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/Time.h:
+
+C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/SysTickCounter.h:
 
 C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/Pwm.h:
 

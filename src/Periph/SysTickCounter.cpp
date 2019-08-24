@@ -15,10 +15,8 @@ static bool s_wasInitialized = false;
 
 void SysTickCounter::init()
 {
-	TRACE("Systick init start\n\r");
-
 	if(SysTick_Config((uint32_t)(HAL_RCC_GetHCLKFreq() / 1000)) == 0) {
-		TRACE("Systick init success\n\r");
+		//TRACE("Systick init success\n\r");
 	}
 	else {
 		TRACE("Systick init error\n\r");

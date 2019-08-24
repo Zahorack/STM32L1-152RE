@@ -16,6 +16,7 @@ namespace Control
 
 	Container::Result<Packet> Communication::update()
 	{
+		//TRACE("rx: %d\n\r", m_rfModule.bytesAvailable());
 		switch(m_state) {
 		case WaitingForNextPacket:
 			waitForNextPacket();

@@ -40,28 +40,16 @@ static bool directionToPin(Dirs::Enum direction)
 static constexpr struct {
 	GPIO_TypeDef *port;
 	uint16_t id;
-} DirPinsConfig[Engines::Size][2]= {
+} DirPinsConfig[Engines::Size]= {
  	/* M1 */
-	{
-		{ /* Dir pin 1 */
-				port: GPIOA,
-				id: GPIO_PIN_4
-		},
-		{ /* Dir pin 2 */
-				port: GPIOB,
-				id: GPIO_PIN_0
-		},
+	{ /* Dir pin 1 */
+			port: GPIOA,
+			id: GPIO_PIN_4
 	},
- 	/* M2 */
-	{
-		{ /* Dir pin 1 */
-				port: GPIOC,
-				id: GPIO_PIN_0
-		},
-		{ /* Dir pin 2 */
-				port: GPIOC,
-				id: GPIO_PIN_1
-		},
+	/* M2 */
+	{ /* Dir pin 2 */
+			port: GPIOB,
+			id: GPIO_PIN_0
 	}
 };
 
@@ -69,31 +57,37 @@ static constexpr struct {
 Engine::Engine(Engines::Enum id) :
 	id(id),
 	m_pwm(),
-	m_direction1(DirPinsConfig[id][0].port, DirPinsConfig[id][0].id),
-	m_direction2(DirPinsConfig[id][1].port, DirPinsConfig[id][1].id)
+	m_timer(Util::Time::FromMilliSeconds(1)),
+	m_direction(DirPinsConfig[id].port, DirPinsConfig[id].id)
 {
 	m_pwm.write(enginesToPwms(id), 0);
 	setCurrentDirection(Dirs::Forward);
+	m_timer.start();
 }
 
 void Engine::start()
 {
-	s_engineState.setFlag(States::IsRunning + States::Offset * id);
+	s_engineState.setFlag(States::IsRunning + (id << States::Offset));
 }
 
 void Engine::stop()
 {
-	s_engineState.resetFlag(States::IsRunning + States::Offset * id);
+	s_engineState.resetFlag(States::IsRunning + (id << States::Offset));
 }
 
 bool Engine::isRunning() const
 {
-	return s_engineState.flag(States::IsRunning + States::Offset * id);
+	return s_engineState.flag(States::IsRunning + (id << States::Offset));
 }
 
 void Engine::setTargetSpeed(uint8_t speed)
 {
 	s_engineSpeeds[id] = speed;
+}
+
+void Engine::setCurrentSpeed(uint8_t speed)
+{
+	m_pwm.write(enginesToPwms(id), speed);
 }
 
 uint8_t Engine::getTargetSpeed() const
@@ -113,8 +107,7 @@ void Engine::setTargetDirection(Dirs::Enum direction)
 
 void Engine::setCurrentDirection(Dirs::Enum direction)
 {
-	m_direction1.setPinTo(directionToPin(direction));
-	m_direction2.setPinTo(!directionToPin(direction));
+	m_direction.setPinTo(directionToPin(direction));
 }
 
 Dirs::Enum Engine::getTargetDirection() const
@@ -124,7 +117,7 @@ Dirs::Enum Engine::getTargetDirection() const
 
 Dirs::Enum Engine::getCurrentDirection() const
 {
-	return pinToDirection(m_direction1.readPin());
+	return pinToDirection(m_direction.readPin());
 }
 
 void Engine::speedUp()
@@ -155,10 +148,14 @@ void Engine::moveInDirection()
 
 void Engine::update()
 {
-	if(getCurrentDirection() != getTargetDirection())
-		turnAround();
-	else
-		moveInDirection();
+	//if(m_timer.run()) {
+		if(isRunning()) {
+			if(getCurrentDirection() != getTargetDirection())
+				turnAround();
+			else
+				moveInDirection();
+		}
+	//}
 }
 
 } /* namespace Periph */

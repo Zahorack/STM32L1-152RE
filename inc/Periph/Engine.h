@@ -9,6 +9,7 @@
 #define PERIPH_ENGINE_H_
 
 #include <Periph/DigitalOutputPin.h>
+#include "Util/Timer.h"
 #include "stm32l1xx.h"
 #include "Pwm.h"
 
@@ -40,8 +41,8 @@ class Engine {
 	const Engines::Enum id;
 
 	Pwm m_pwm;
-	DigitalOutputPin m_direction1;
-	DigitalOutputPin m_direction2;
+	Util::Timer m_timer;
+	DigitalOutputPin m_direction;
 
 	void turnAround();
 	void moveInDirection();
@@ -58,6 +59,7 @@ public:
 
 	void setCurrentDirection(Dirs::Enum direction);
 	void setTargetSpeed(uint8_t speed);
+	void setCurrentSpeed(uint8_t speed);
 	uint8_t getTargetSpeed() const;
 	uint8_t getCurrentSpeed() const;
 

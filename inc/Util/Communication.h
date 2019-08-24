@@ -18,7 +18,7 @@ namespace Control
 	static constexpr uint16_t
 		JostickQuadrantOffset = 70,
 		JoystickMiddle = 100,
-		JoystickTreshold = 7;
+		JoystickTreshold = 2;
 
 	class Communication {
 		Periph::Usart m_rfModule;

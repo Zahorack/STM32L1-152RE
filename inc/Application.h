@@ -34,8 +34,6 @@ public:
 	Control::Control control;
 	Control::Communication communication;
 
-
-
 private:
 	Periph::Led m_appRunningLed;
 

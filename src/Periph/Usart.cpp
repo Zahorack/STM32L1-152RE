@@ -245,8 +245,8 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *ref)
 	if (ref == &Periph::huart[Periph::Usarts::Usart3]) {
 		// do something with rx_data
 		//TRACE("UART3");
-//		Periph::s_readQueues[Periph::Usarts::Usart3].enqueue(static_cast<uint8_t>(Periph::rxByte[Periph::Usarts::Usart3]));
-//		HAL_UART_Receive_IT(&Periph::huart[Periph::Usarts::Usart3], &Periph::rxByte[Periph::Usarts::Usart3], 1);
+		Periph::s_readQueues[Periph::Usarts::Usart3].enqueue(static_cast<uint8_t>(Periph::rxByte[Periph::Usarts::Usart3]));
+		HAL_UART_Receive_IT(&Periph::huart[Periph::Usarts::Usart3], &Periph::rxByte[Periph::Usarts::Usart3], 1);
 	}
 
 }

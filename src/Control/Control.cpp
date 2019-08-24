@@ -10,7 +10,6 @@
 #include "Util/Tool.h"
 #include "Util/Trace.h"
 
-
 LOGGER_MODULE(Control)
 
 namespace Control
@@ -40,6 +39,7 @@ namespace Control
 
 	void Control::setControlData(const ManualControlPacket &controlData)
 	{
+		m_watchdog.wasTriggeredNow();
 
 		switch(m_controlMode) {
 			case ControlModes::ManualMode:

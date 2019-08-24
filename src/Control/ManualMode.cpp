@@ -17,31 +17,39 @@ namespace Control
 			Periph::Engine m_engine_left, Periph::Engine m_engine_right
 			)
 	{
-//		TRACE("x: %d", controlData.joystickData.x);
-//		TRACE("y: %d \n\r", controlData.joystickData.y);
+		TRACE("y: %d", controlData.joystickData.y);
+		TRACE("x: %d \n\r", controlData.joystickData.x);
 
 		uint8_t leftSpeed = 0, rightSpeed = 0;
 
 		if(controlData.joystickData.y > JoystickMiddle + JoystickTreshold) {
-			m_engine_left.setTargetDirection(Periph::Dirs::Forward);
-			leftSpeed = controlData.joystickData.y - JoystickMiddle;
+			m_engine_left.setTargetDirection(Periph::Dirs::Backward);
+			leftSpeed = controlData.joystickData.y - JoystickMiddle + JoystickTreshold;
 		}
 		else if(controlData.joystickData.y < JoystickMiddle - JoystickTreshold) {
-			m_engine_left.setTargetDirection(Periph::Dirs::Backward);
-			leftSpeed = JoystickMiddle - controlData.joystickData.y;
+			m_engine_left.setTargetDirection(Periph::Dirs::Forward);
+			leftSpeed = JoystickMiddle - controlData.joystickData.y - JoystickTreshold;
 		}
 
 		if(controlData.joystickData.x > JoystickMiddle + JoystickTreshold) {
 			m_engine_right.setTargetDirection(Periph::Dirs::Backward);
-			rightSpeed = controlData.joystickData.x - JoystickMiddle;
+
+			rightSpeed = controlData.joystickData.x - JoystickMiddle + JoystickTreshold;
 		}
 		else if(controlData.joystickData.x < JoystickMiddle - JoystickTreshold) {
 			m_engine_right.setTargetDirection(Periph::Dirs::Forward);
-			rightSpeed = JoystickMiddle - controlData.joystickData.x;
+			rightSpeed = JoystickMiddle - controlData.joystickData.x  - JoystickTreshold;
 		}
 
-//		m_engine_left.setTargetSpeed(Util::clamp<uint8_t>(leftSpeed, 0, 100));
-//		m_engine_right.setTargetSpeed(Util::clamp<uint8_t>(rightSpeed, 0, 100));
+
+		leftSpeed = Util::clamp<uint8_t>(Util::map<uint8_t>(leftSpeed, 0, 100, 45, 60), 0, 100);
+		rightSpeed = Util::clamp<uint8_t>(Util::map<uint8_t>(rightSpeed, 0, 100, 45, 60), 0, 100);
+
+
+		m_engine_left.setTargetSpeed(leftSpeed > 55 ? leftSpeed : 0);
+		m_engine_right.setTargetSpeed(rightSpeed > 55 ? rightSpeed : 0);
+
+
 
 		m_engine_left.start();
 		m_engine_right.start();
