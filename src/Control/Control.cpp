@@ -58,7 +58,7 @@ namespace Control
 	{
 		if(m_watchdog.run()) {
 			stop();
-			INF_LOG("DISCONNECTED");
+			//INF_LOG("DISCONNECTED");
 		}
 
 		switch(m_controlMode) {

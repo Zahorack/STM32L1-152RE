@@ -15,6 +15,8 @@
 #include "Periph/Usart.h"
 #include "Util/Logger.h"
 #include "Util/Bms.h"
+#include "Periph/Adc.h"
+#include "Periph/AdcIT.h"
 
 #include "Control/Control.h"
 #include "Util/Communication.h"

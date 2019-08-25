@@ -5,6 +5,8 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
 ../src/Periph/Adc.cpp \
+../src/Periph/AdcIT.cpp \
+../src/Periph/Buzzer.cpp \
 ../src/Periph/DigitalOutputPin.cpp \
 ../src/Periph/Engine.cpp \
 ../src/Periph/Led.cpp \
@@ -15,6 +17,8 @@ CPP_SRCS += \
 
 OBJS += \
 ./src/Periph/Adc.o \
+./src/Periph/AdcIT.o \
+./src/Periph/Buzzer.o \
 ./src/Periph/DigitalOutputPin.o \
 ./src/Periph/Engine.o \
 ./src/Periph/Led.o \
@@ -25,6 +29,8 @@ OBJS += \
 
 CPP_DEPS += \
 ./src/Periph/Adc.d \
+./src/Periph/AdcIT.d \
+./src/Periph/Buzzer.d \
 ./src/Periph/DigitalOutputPin.d \
 ./src/Periph/Engine.d \
 ./src/Periph/Led.d \

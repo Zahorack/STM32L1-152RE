@@ -31,7 +31,7 @@ class Adc {
 public:
 	Adc(AdcPins::Enum a_id);
 
-	uint16_t read();
+	uint32_t read();
 
 };
 

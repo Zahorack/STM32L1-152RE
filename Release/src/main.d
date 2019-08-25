@@ -63,10 +63,13 @@ src/main.o: ../src/main.cpp \
  C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/Timer.h \
  C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/Time.h \
  C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/SysTickCounter.h \
- C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Control/Control.h \
- C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/Engine.h \
+ C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/Buzzer.h \
  C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/DigitalOutputPin.h \
  C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/RefCounter.h \
+ C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/Adc.h \
+ C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/AdcIT.h \
+ C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Control/Control.h \
+ C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/Engine.h \
  C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/Pwm.h \
  C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/Servo.h \
  C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/Tool.h \
@@ -204,13 +207,19 @@ C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/Time.h:
 
 C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/SysTickCounter.h:
 
-C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Control/Control.h:
-
-C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/Engine.h:
+C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/Buzzer.h:
 
 C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/DigitalOutputPin.h:
 
 C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/RefCounter.h:
+
+C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/Adc.h:
+
+C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/AdcIT.h:
+
+C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Control/Control.h:
+
+C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/Engine.h:
 
 C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/Pwm.h:
 

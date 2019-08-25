@@ -51,7 +51,7 @@ void Application::run()
 		if(timer.run()) {
 			//communication.sendStatus();
 			//INF_LOG("Tick");
-			TRACE("Tick\n\r");
+			//TRACE("Tick\n\r");
 		}
 
 	}

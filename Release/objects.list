@@ -69,6 +69,8 @@
 "src/Control/ManualMode.o"
 "src/Control/Packet.o"
 "src/Periph/Adc.o"
+"src/Periph/AdcIT.o"
+"src/Periph/Buzzer.o"
 "src/Periph/DigitalOutputPin.o"
 "src/Periph/Engine.o"
 "src/Periph/Led.o"

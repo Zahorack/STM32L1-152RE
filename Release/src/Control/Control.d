@@ -74,6 +74,9 @@ src/Control/Control.o: ../src/Control/Control.cpp \
  C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/Logger.h \
  C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/Bms.h \
  C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/Adc.h \
+ C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/Buzzer.h \
+ C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/Adc.h \
+ C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/AdcIT.h \
  C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Control/Control.h \
  C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/Communication.h \
  C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/Trace.h
@@ -227,6 +230,12 @@ C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/Logger.h:
 C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/Bms.h:
 
 C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/Adc.h:
+
+C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/Buzzer.h:
+
+C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/Adc.h:
+
+C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/AdcIT.h:
 
 C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Control/Control.h:
 
