@@ -71,6 +71,7 @@ src/main.o: ../src/main.cpp \
  C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Control/Control.h \
  C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/Engine.h \
  C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/Pwm.h \
+ C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/Feeder.h \
  C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/Servo.h \
  C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/Tool.h \
  C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Control/ManualMode.h \
@@ -222,6 +223,8 @@ C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Control/Control.h:
 C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/Engine.h:
 
 C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/Pwm.h:
+
+C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/Feeder.h:
 
 C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/Servo.h:
 

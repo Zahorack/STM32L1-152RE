@@ -73,6 +73,7 @@
 "src/Periph/Buzzer.o"
 "src/Periph/DigitalOutputPin.o"
 "src/Periph/Engine.o"
+"src/Periph/Feeder.o"
 "src/Periph/Led.o"
 "src/Periph/Pwm.o"
 "src/Periph/Servo.o"

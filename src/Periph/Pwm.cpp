@@ -6,6 +6,7 @@
  */
 
 #include "Periph/Pwm.h"
+#include "Periph/Servo.h"
 
 namespace Periph
 {
@@ -176,6 +177,11 @@ namespace Periph
 		}
 
 		++s_refCounter;
+
+//		write(Pwms::Pwm5, ServoHomePosition);
+//		write(Pwms::Pwm6, ServoHomePosition);
+//		write(Pwms::Pwm7, ServoHomePosition);
+//		write(Pwms::Pwm8, ServoHomePosition);
 	}
 
 	Pwm::~Pwm()

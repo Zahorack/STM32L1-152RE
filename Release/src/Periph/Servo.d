@@ -60,7 +60,8 @@ src/Periph/Servo.o: ../src/Periph/Servo.cpp \
  C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/Timer.h \
  C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/Time.h \
  C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/SysTickCounter.h \
- C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/State.h
+ C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/State.h \
+ C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/Trace.h
 
 C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/Servo.h:
 
@@ -185,3 +186,5 @@ C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/Time.h:
 C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/SysTickCounter.h:
 
 C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/State.h:
+
+C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/Trace.h:

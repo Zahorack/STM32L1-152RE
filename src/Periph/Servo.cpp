@@ -7,6 +7,7 @@
 
 #include "Periph/Servo.h"
 #include "Util/State.h"
+#include "Util/Trace.h"
 
 namespace Periph
 {
@@ -19,20 +20,6 @@ namespace Periph
 
 	static Util::State<uint8_t> s_servoState;
 
-	/* Servo  specification
-	 *
-	 * Left position   s_servoConstant
-	 * Home position:  s_servoConstant + 1000
-	 * Right position  s_servoConstant + 2000
-	 *
-	 * Working resolution: +-1000 samples
-	 */
-
-	static constexpr uint16_t
-		ServoConstant = 500,
-		ServoHomePosition = 1000,
-		ServoMaxPosition = 2000,
-		ServoMinPosition = 0;
 
 	static uint16_t s_servoAngles[Servos::Size] = { 0, 0, 0, 0 };
 
@@ -43,21 +30,21 @@ namespace Periph
 
 	Servo::Servo(Servos::Enum id) :
 		id(id),
-		m_timer(Util::Time::FromMilliSeconds(10))
+		m_timer(Util::Time::FromMilliSeconds(1))
 	{
 		start();
 		m_timer.start();
-
+		m_pwm.write(servosToPwms(id), ServoConstant + ServoHomePosition);
 		setTargetAngle(ServoHomePosition);
 	}
 
-	Servo::Servo(Servos::Enum id, uint16_t defaultAngle) :
+	Servo::Servo(Servos::Enum id, int16_t defaultAngle) :
 		id(id),
-		m_timer(Util::Time::FromMilliSeconds(10))
+		m_timer(Util::Time::FromMilliSeconds(1))
 	{
 		start();
 		m_timer.start();
-
+		m_pwm.write(servosToPwms(id), ServoConstant + ServoHomePosition);
 		setTargetAngle(ServoHomePosition + defaultAngle);
 	}
 
@@ -88,7 +75,7 @@ namespace Periph
 
 	uint16_t Servo::getTargetAngle() const
 	{
-		return s_servoAngles[id] - ServoConstant;
+		return s_servoAngles[id];
 	}
 
 	uint16_t Servo::getCurrentAngle() const
@@ -123,13 +110,11 @@ namespace Periph
 
 	void Servo::incrementAngleInternal()
 	{
-		if(getCurrentAngle() < ServoHomePosition + ServoMaxPosition)
 			m_pwm.write(servosToPwms(id), getCurrentAngle() + 1);
 	}
 
 	void Servo::decrementAngleInternal()
 	{
-		if(getCurrentAngle() > ServoHomePosition + ServoMinPosition)
 			m_pwm.write(servosToPwms(id), getCurrentAngle() - 1);
 	}
 }

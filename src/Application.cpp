@@ -30,8 +30,6 @@ void Application::run()
 	m_appRunningLed.turnOn();
 	INF_LOG("Application started running.");
 
-
-
 	//communication.sendStatus();
 
 	Util::Timer timer(Util::Time::FromMilliSeconds(1000));

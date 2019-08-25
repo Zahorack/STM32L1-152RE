@@ -11,7 +11,7 @@
 #include "stm32l1xx.h"
 #include "Periph/Engine.h"
 #include "Periph/Usart.h"
-#include "Periph/Servo.h"
+#include "Periph/Feeder.h"
 
 #include "Control/ManualMode.h"
 #include "Util/Communication.h"
@@ -34,8 +34,7 @@ namespace Control
 	class Control {
 
 		Periph::Engine m_engine_left, m_engine_right;
-
-		Periph::Servo m_servo;
+		Periph::Feeder m_feeder;
 
 		Util::Timer
 			m_watchdog = Util::Timer(Util::Time::FromSeconds(1)),

@@ -16,14 +16,13 @@ namespace Control
 {
 	Control::Control():
 		m_engine_left(Periph::Engines::M1),
-		m_engine_right(Periph::Engines::M2),
-		m_servo(Periph::Servos::Servo1)
+		m_engine_right(Periph::Engines::M2)
 	{
 		m_watchdog.start();
 		m_updateTimer.start();
 
 		stop();
-
+		m_feeder.open(Periph::Feeders::Left);
 	}
 
 	Control::~Control(){
@@ -34,7 +33,6 @@ namespace Control
 	{
 		m_engine_left.stop();
 		m_engine_right.stop();
-		m_servo.stop();
 	}
 
 	void Control::setControlData(const ManualControlPacket &controlData)
@@ -73,7 +71,6 @@ namespace Control
 
 		m_engine_left.update();
 		m_engine_right.update();
-		m_servo.update();
-
+		m_feeder.update();
 	}
 }

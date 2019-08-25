@@ -24,6 +24,7 @@ class Bms {
 
 	float m_batteryVoltage;
 	uint8_t m_batteryLevel;
+	uint32_t m_uptime;
 
 	float readBatteryVoltage();
 

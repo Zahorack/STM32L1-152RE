@@ -9,6 +9,7 @@ CPP_SRCS += \
 ../src/Periph/Buzzer.cpp \
 ../src/Periph/DigitalOutputPin.cpp \
 ../src/Periph/Engine.cpp \
+../src/Periph/Feeder.cpp \
 ../src/Periph/Led.cpp \
 ../src/Periph/Pwm.cpp \
 ../src/Periph/Servo.cpp \
@@ -21,6 +22,7 @@ OBJS += \
 ./src/Periph/Buzzer.o \
 ./src/Periph/DigitalOutputPin.o \
 ./src/Periph/Engine.o \
+./src/Periph/Feeder.o \
 ./src/Periph/Led.o \
 ./src/Periph/Pwm.o \
 ./src/Periph/Servo.o \
@@ -33,6 +35,7 @@ CPP_DEPS += \
 ./src/Periph/Buzzer.d \
 ./src/Periph/DigitalOutputPin.d \
 ./src/Periph/Engine.d \
+./src/Periph/Feeder.d \
 ./src/Periph/Led.d \
 ./src/Periph/Pwm.d \
 ./src/Periph/Servo.d \

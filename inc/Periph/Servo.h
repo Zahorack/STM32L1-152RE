@@ -16,6 +16,21 @@
 
 namespace Periph
 {
+
+	/* Servo  specification
+	 *
+	 * Left position   s_servoConstant
+	 * Home position:  s_servoConstant + 1000
+	 * Right position  s_servoConstant + 2000
+	 *
+	 * Working resolution: +-1000 samples
+	 */
+	const uint16_t
+		ServoConstant = 500,
+		ServoHomePosition = 1000,
+		ServoMaxPosition = 2000,
+		ServoMinPosition = 0;
+
 	namespace Servos
 	{
 		enum Enum : uint8_t {
@@ -36,7 +51,7 @@ namespace Periph
 
 	public:
 		Servo(Servos::Enum id);
-		Servo(Servos::Enum id, uint16_t defaultAngle);
+		Servo(Servos::Enum id, int16_t defaultAngle);
 		~Servo();
 
 		void start();
