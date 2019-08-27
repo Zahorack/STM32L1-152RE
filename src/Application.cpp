@@ -43,10 +43,17 @@ void Application::run()
 		if(communicationResult.isValid && communicationResult.value.header.type == Control::PacketType::ManualControl)
 			control.setControlData(communicationResult.value.contents.dataPacket);
 
+		if(communicationResult.isValid && communicationResult.value.header.type == Control::PacketType::OpenLeftFeeder)
+			control.command(Control::PacketType::OpenLeftFeeder);
+
+		if(communicationResult.isValid && communicationResult.value.header.type == Control::PacketType::OpenRightFeeder)
+			control.command(Control::PacketType::OpenRightFeeder);
+
 		control.update();
 		bms.update();
 
 		if(timer.run()) {
+			communication.sendStatus();
 			//communication.sendStatus();
 			//INF_LOG("Tick");
 			//TRACE("Tick\n\r");

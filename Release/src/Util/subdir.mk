@@ -7,7 +7,6 @@ CPP_SRCS += \
 ../src/Util/Bms.cpp \
 ../src/Util/Communication.cpp \
 ../src/Util/Logger.cpp \
-../src/Util/Packet.cpp \
 ../src/Util/Timer.cpp \
 ../src/Util/Trace.cpp 
 
@@ -15,7 +14,6 @@ OBJS += \
 ./src/Util/Bms.o \
 ./src/Util/Communication.o \
 ./src/Util/Logger.o \
-./src/Util/Packet.o \
 ./src/Util/Timer.o \
 ./src/Util/Trace.o 
 
@@ -23,7 +21,6 @@ CPP_DEPS += \
 ./src/Util/Bms.d \
 ./src/Util/Communication.d \
 ./src/Util/Logger.d \
-./src/Util/Packet.d \
 ./src/Util/Timer.d \
 ./src/Util/Trace.d 
 

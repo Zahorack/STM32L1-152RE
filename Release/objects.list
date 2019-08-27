@@ -82,7 +82,6 @@
 "src/Util/Bms.o"
 "src/Util/Communication.o"
 "src/Util/Logger.o"
-"src/Util/Packet.o"
 "src/Util/Timer.o"
 "src/Util/Trace.o"
 "startup/startup_stm32l152xe.o"

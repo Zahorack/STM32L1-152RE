@@ -12,13 +12,17 @@
 
 namespace Control
 {
+	const uint16_t PacketMark = 0x4B4C;
+
 	namespace PacketType
 	{
 		enum Enum : uint8_t {
 			Nack = 0,
 			Ack,
 			Status,
-			ManualControl
+			ManualControl,
+			OpenLeftFeeder,
+			OpenRightFeeder
 		};
 	}
 
@@ -40,18 +44,20 @@ namespace Control
 	struct __attribute__((packed)) AckPacket {
 	};
 
+	struct OpenLeftFeederPacket {
+	};
+
+	struct OpenRightFeederPacket {
+	};
+
 	struct __attribute__((packed)) StatusPacket {
 		uint32_t uptime;
-		uint16_t batteryVoltage;
+		uint8_t batteryChargeLevel;
 	};
 
 	struct __attribute__((packed)) ManualControlPacket {
 		axe_t 	joystickData;
 	};
-
-	typedef struct {
-	        axe_t joystickData;
-	} __attribute__((packed)) controlData_t;
 
 	union PacketContents {
 		NackPacket nackPacket;
@@ -66,7 +72,6 @@ namespace Control
 	class Packet {
 
 	public:
-		static constexpr uint16_t Mark = 0x4B4C;
 
 		PacketHeader header;
 		PacketContents contents;

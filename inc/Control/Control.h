@@ -15,6 +15,7 @@
 
 #include "Control/ManualMode.h"
 #include "Util/Communication.h"
+#include "Control/Packet.h"
 
 #include "Util/Timer.h"
 
@@ -51,6 +52,7 @@ namespace Control
 		void stop();
 
 		void setControlData(const ManualControlPacket &controlData);
+		void command(PacketType::Enum cmd);
 
 		void update();
 	};

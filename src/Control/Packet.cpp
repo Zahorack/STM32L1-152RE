@@ -30,10 +30,13 @@ namespace Control
 	};
 
 	static constexpr uint32_t PacketSizes[256] = {
-			sizeof(NackPacket),
-			sizeof(AckPacket),
+			0 /*sizeof(NackPacket)*/,
+			0 /*sizeof(AckPacket)*/,
 			sizeof(StatusPacket),
-			sizeof(ManualControlPacket)
+			sizeof(ManualControlPacket),
+			0 /*sizeof(OpenLeftFeederPacket)*/,
+			0 /*sizeof(OpenRightFeederPacket)*/
+
 	};
 
 	uint32_t Packet::SizeForType(PacketType::Enum packetType)

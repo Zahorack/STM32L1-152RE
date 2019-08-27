@@ -10,6 +10,8 @@
 #include "Util/Bms.h"
 #include "Util/Tool.h"
 
+uint8_t g_batteryChargeLevel;
+
 namespace Util {
 
 static float KalmanFilter(float z_measured);
@@ -56,7 +58,7 @@ namespace Battery {
 	};
 }
 
-
+static const float VoltageCorectionConstant = 1.01;
 
 namespace VoltageDivider {
 	static const uint16_t R1 = 30; //kohm
@@ -137,7 +139,7 @@ float Bms::readBatteryVoltage()
 	float dividerVoltage = m_adc.read()*(3.3/4096.0);
 	float batteryVoltage = dividerVoltage*((VoltageDivider::R1 + VoltageDivider::R2)/VoltageDivider::R2);
 
-	return batteryVoltage;
+	return batteryVoltage * VoltageCorectionConstant;
 }
 
 float Bms::getBatteryVoltage()
@@ -163,6 +165,7 @@ void Bms::update()
 		}
 	}
 
+	g_batteryChargeLevel = getChargeLevel();
 	m_buzzer.update();
 }
 

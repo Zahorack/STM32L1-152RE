@@ -22,6 +22,9 @@ namespace Control
 
 	class Communication {
 		Periph::Usart m_rfModule;
+		uint32_t m_transmitID;
+		uint32_t m_receiveID;
+
 
 		enum State {
 			WaitingForNextPacket,
@@ -31,12 +34,20 @@ namespace Control
 
 		State m_state = WaitingForNextPacket;
 		Packet m_currentPacket;
+		Packet m_transmitPacket;
 
 	public:
 		Communication();
 
 		Container::Result<Packet> update();
 		void sendStatus();
+		void sendAck();
+		void sendNack();
+		void send(PacketType::Enum type);
+
+		void send(Packet);
+
+
 
 	private:
 		void waitForNextPacket();
@@ -44,6 +55,9 @@ namespace Control
 		Container::Result<Packet> readPacketContents();
 		bool checkHeaderCrc();
 		bool checkDataCrc();
+
+		void sendHeader(PacketHeader header);
+		void sendContents(PacketContents content);
 	};
 }
 #endif /* UTIL_PACKET_H_ */

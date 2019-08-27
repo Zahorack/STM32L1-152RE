@@ -13,6 +13,9 @@
 #include "Util/Timer.h"
 #include "Periph/Buzzer.h"
 
+
+extern uint8_t g_batteryChargeLevel;
+
 namespace Util {
 
 class Bms {

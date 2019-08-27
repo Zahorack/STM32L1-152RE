@@ -56,7 +56,15 @@ src/Util/Communication.o: ../src/Util/Communication.cpp \
  C:/Users/Oliver/Documents/workspace/STM32L1-152RE/HAL_Driver/Inc/stm32l1xx_hal_pcd_ex.h \
  C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/Usart.h \
  C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Control/Packet.h \
- C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/Trace.h
+ C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/Trace.h \
+ C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/Bms.h \
+ C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/Adc.h \
+ C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/Timer.h \
+ C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/Time.h \
+ C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/SysTickCounter.h \
+ C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/Buzzer.h \
+ C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/DigitalOutputPin.h \
+ C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/RefCounter.h
 
 C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/Communication.h:
 
@@ -173,3 +181,19 @@ C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/Usart.h:
 C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Control/Packet.h:
 
 C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/Trace.h:
+
+C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/Bms.h:
+
+C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/Adc.h:
+
+C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/Timer.h:
+
+C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/Time.h:
+
+C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/SysTickCounter.h:
+
+C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/Buzzer.h:
+
+C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Periph/DigitalOutputPin.h:
+
+C:/Users/Oliver/Documents/workspace/STM32L1-152RE/inc/Util/RefCounter.h:

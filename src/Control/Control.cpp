@@ -10,6 +10,7 @@
 #include "Util/Tool.h"
 #include "Util/Trace.h"
 
+
 LOGGER_MODULE(Control)
 
 namespace Control
@@ -22,7 +23,7 @@ namespace Control
 		m_updateTimer.start();
 
 		stop();
-		m_feeder.open(Periph::Feeders::Left);
+		//m_feeder.open(Periph::Feeders::Left);
 	}
 
 	Control::~Control(){
@@ -49,6 +50,15 @@ namespace Control
 				break;
 			case ControlModes::Size:
 				break;
+		}
+	}
+
+	void Control::command(PacketType::Enum cmd)
+	{
+		TRACE("cmd : %d", cmd);
+		switch((uint8_t)cmd) {
+			case PacketType::OpenLeftFeeder : m_feeder.open(Periph::Feeders::Left); break;
+			case PacketType::OpenRightFeeder : m_feeder.open(Periph::Feeders::Right); break;
 		}
 	}
 
