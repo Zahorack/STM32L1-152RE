@@ -50,15 +50,14 @@ void Application::run()
 			control.command(Control::PacketType::OpenRightFeeder);
 
 		control.update();
-		bms.update();
+		//bms.update();
 
 		if(timer.run()) {
-			communication.sendStatus();
+			//communication.sendStatus();
 			//communication.sendStatus();
 			//INF_LOG("Tick");
 			//TRACE("Tick\n\r");
 		}
-
 	}
 
 	INF_LOG("Application ended.");

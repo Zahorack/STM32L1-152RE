@@ -12,6 +12,7 @@
 #include "stm32l1xx.h"
 #include "Periph/Usart.h"
 #include "Control/Packet.h"
+#include "Container/Queue.h"
 
 namespace Control
 {

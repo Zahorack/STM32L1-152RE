@@ -164,6 +164,8 @@ uint8_t Usart::read()
 
 	while(!(readResult = s_readQueues[id].dequeue()).isValid) {}
 
+	//TRACE("%d\n\r", readResult.value);
+
 	return readResult.value;
 }
 
