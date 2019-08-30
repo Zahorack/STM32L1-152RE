@@ -28,21 +28,21 @@ bool WrapperStack<T>::push(T entry)
 }
 
 template<typename T>
-OperationResult<T> WrapperStack<T>::pop()
+Result<T> WrapperStack<T>::pop()
 {
 	if(m_stackSize == 0)
-		return OperationResult<T>();
+		return Result<T>();
 
-	return OperationResult<T>(m_bufferBegin[--m_stackSize]);
+	return Result<T>(m_bufferBegin[--m_stackSize]);
 }
 
 template<typename T>
-OperationResult<T> WrapperStack<T>::peek(uint32_t howFar) const
+Result<T> WrapperStack<T>::peek(uint32_t howFar) const
 {
 	if(howFar < m_stackSize)
-		return OperationResult<T>();
+		return Result<T>();
 
-	return OperationResult<T>(m_bufferBegin[m_stackSize - howFar]);
+	return Result<T>(m_bufferBegin[m_stackSize - howFar]);
 }
 
 template class WrapperStack<volatile uint8_t>;

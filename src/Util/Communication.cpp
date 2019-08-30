@@ -14,12 +14,26 @@ static Container::Queue<volatile Control::Packet, 10> s_priorityQueue;
 namespace Control
 {
 	Communication::Communication() :
-		m_rfModule(Periph::Usarts::Usart1, 57600)
-	{}
+		m_rfModule(Periph::Usarts::Usart1, 57600),
+		m_timer(Util::Time::FromMilliSeconds(3000))
+	{
+		m_timer.start();
+	}
 
 	Container::Result<Packet> Communication::update()
 	{
 		//TRACE("rx: %d\n\r", m_rfModule.bytesAvailable());
+
+		Container::Result<Control::Packet> attempt = m_handshaking.update();
+		if((attempt.isValid)) {
+			TRACE("Handshaking send attempt\n\r");
+			send(attempt.value);
+		}
+
+		if(m_timer.run()) {
+			sendStatus();
+		}
+
 		switch(m_state) {
 			case WaitingForNextPacket:
 				waitForNextPacket();
@@ -89,6 +103,9 @@ namespace Control
 			m_state = WaitingForNextPacket;
 			if(m_currentPacket.header.type != PacketType::Ack && m_currentPacket.header.type != PacketType::Nack) {
 				sendAck();
+			}
+			else if (m_currentPacket.header.type == PacketType::Ack) {
+				m_handshaking.check(m_currentPacket);
 			}
 
 			return Container::Result<Packet>(m_currentPacket);
@@ -187,6 +204,8 @@ namespace Control
 
 		status.contents.statusPacket.batteryChargeLevel = g_batteryChargeLevel;
 		status.contents.statusPacket.uptime = 0;
+
+		m_handshaking.add(status);
 
 		send(status);
 

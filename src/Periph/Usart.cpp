@@ -160,7 +160,7 @@ bool Usart::write(const uint8_t *c, uint32_t size)
 
 uint8_t Usart::read()
 {
-	Container::OperationResult<volatile uint8_t> readResult;
+	Container::Result<volatile uint8_t> readResult;
 
 	while(!(readResult = s_readQueues[id].dequeue()).isValid) {}
 

@@ -9,7 +9,7 @@
 #define CONTAINER_QUEUE_H_
 
 #include "stm32l1xx.h"
-#include "OperationResult.h"
+#include "Result.h"
 
 namespace Container {
 
@@ -25,8 +25,9 @@ public:
 
 	bool enqueue(T entry);
 
-	OperationResult<T> dequeue();
-	OperationResult<T> peek(uint32_t howFar = 1) const;
+	Result<T> dequeue();
+	Result<T> value();
+	Result<T> peek(uint32_t howFar = 1) const;
 
 	inline uint32_t size() const {
 		return m_queueEnd >= m_queueStart ?

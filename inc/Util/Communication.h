@@ -13,6 +13,8 @@
 #include "Periph/Usart.h"
 #include "Control/Packet.h"
 #include "Container/Queue.h"
+#include "Util/Handshaking.h"
+#include "Util/Timer.h"
 
 namespace Control
 {
@@ -23,9 +25,9 @@ namespace Control
 
 	class Communication {
 		Periph::Usart m_rfModule;
-		uint32_t m_transmitID;
-		uint32_t m_receiveID;
-
+		uint32_t m_transmitID = 0;
+		uint32_t m_receiveID = 0;
+		Util::Timer m_timer;
 
 		enum State {
 			WaitingForNextPacket,
@@ -36,6 +38,7 @@ namespace Control
 		State m_state = WaitingForNextPacket;
 		Packet m_currentPacket;
 		Packet m_transmitPacket;
+		Util::Handshaking m_handshaking;
 
 	public:
 		Communication();

@@ -9,7 +9,7 @@
 #define CONTAINER_STACK_H_
 
 #include "stm32l1xx.h"
-#include "OperationResult.h"
+#include "Result.h"
 
 namespace Container {
 
@@ -24,8 +24,8 @@ public:
 
 	bool push(T entry);
 
-	OperationResult<T> pop();
-	OperationResult<T> peek(uint32_t howFar = 1) const;
+	Result<T> pop();
+	Result<T> peek(uint32_t howFar = 1) const;
 
 	inline uint32_t size() const { return m_stackSize; }
 	inline bool isEmpty() const { return m_stackSize == 0; }

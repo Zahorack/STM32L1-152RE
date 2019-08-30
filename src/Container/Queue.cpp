@@ -33,12 +33,12 @@ bool WrapperQueue<T>::enqueue(T entry)
 }
 
 template<typename T>
-OperationResult<T> WrapperQueue<T>::dequeue()
+Result<T> WrapperQueue<T>::dequeue()
 {
 	if(isEmpty())
-		return OperationResult<T>();
+		return Result<T>();
 
-	OperationResult<T> rv(m_bufferBegin[m_queueStart++]);
+	Result<T> rv(m_bufferBegin[m_queueStart++]);
 
 	if(m_queueStart == m_bufferSize)
 		m_queueStart = 0;
@@ -47,17 +47,31 @@ OperationResult<T> WrapperQueue<T>::dequeue()
 }
 
 template<typename T>
-OperationResult<T> WrapperQueue<T>::peek(uint32_t howFar) const
+Result<T> WrapperQueue<T>::value() {
+
+	if(isEmpty())
+		return Result<T>();
+
+	Result<T> rv(m_bufferBegin[m_queueStart]);
+
+	if(m_queueStart == m_bufferSize)
+		m_queueStart = 0;
+
+	return rv;
+}
+
+template<typename T>
+Result<T> WrapperQueue<T>::peek(uint32_t howFar) const
 {
 	if(howFar > size())
-		return OperationResult<T>();
+		return Result<T>();
 
 	howFar += m_queueStart;
 
 	if(howFar > m_bufferSize)
 		howFar -= m_bufferSize;
 
-	return OperationResult<T>(m_bufferBegin[howFar]);
+	return Result<T>(m_bufferBegin[howFar]);
 }
 
 template class WrapperQueue<volatile uint8_t>;
