@@ -18,6 +18,7 @@
 #include "Control/Packet.h"
 
 #include "Util/Timer.h"
+#include "Container/Queue.h"
 
 namespace Control
 {

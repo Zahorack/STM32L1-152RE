@@ -35,7 +35,7 @@ public:
 	Periph::Usart usartLog;
 
 	Control::Control control;
-	Control::Communication communication;
+	Util::Communication communication;
 	Util::Bms bms;
 
 private:

@@ -6,6 +6,7 @@
  */
 
 #include "Container/Queue.h"
+#include "Control/Packet.h"
 
 namespace Container {
 
@@ -54,9 +55,6 @@ Result<T> WrapperQueue<T>::value() {
 
 	Result<T> rv(m_bufferBegin[m_queueStart]);
 
-	if(m_queueStart == m_bufferSize)
-		m_queueStart = 0;
-
 	return rv;
 }
 
@@ -75,5 +73,6 @@ Result<T> WrapperQueue<T>::peek(uint32_t howFar) const
 }
 
 template class WrapperQueue<volatile uint8_t>;
+template class WrapperQueue<Control::Packet>;
 
 } /* namespace Container */

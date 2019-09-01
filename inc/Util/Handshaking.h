@@ -9,10 +9,11 @@
 #define HANDSHAKING_H_
 
 #include "stm32l1xx.h"
+#include "Container/Queue.h"
 #include "Util/Timer.h"
 #include "Control/Packet.h"
-#include "Container/Queue.h"
 #include "Container/Result.h"
+
 
 
 namespace Util {

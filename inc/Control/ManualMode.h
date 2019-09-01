@@ -13,6 +13,12 @@
 
 namespace Control
 {
+
+	static constexpr uint16_t
+		JostickQuadrantOffset = 70,
+		JoystickMiddle = 100,
+		JoystickTreshold = 2;
+
 	class ManualMode {
 	public:
 		void setControlData(

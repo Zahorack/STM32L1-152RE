@@ -16,13 +16,8 @@
 #include "Util/Handshaking.h"
 #include "Util/Timer.h"
 
-namespace Control
+namespace Util
 {
-	static constexpr uint16_t
-		JostickQuadrantOffset = 70,
-		JoystickMiddle = 100,
-		JoystickTreshold = 2;
-
 	class Communication {
 		Periph::Usart m_rfModule;
 		uint32_t m_transmitID = 0;
@@ -36,32 +31,31 @@ namespace Control
 		};
 
 		State m_state = WaitingForNextPacket;
-		Packet m_currentPacket;
-		Packet m_transmitPacket;
+		Control::Packet m_currentPacket;
 		Util::Handshaking m_handshaking;
 
 	public:
 		Communication();
 
-		Container::Result<Packet> update();
+		Container::Result<Control::Packet> update();
 		void sendStatus();
 		void sendAck();
 		void sendNack();
-		void send(PacketType::Enum type);
+		void send(Control::PacketType::Enum type);
 
-		void send(Packet);
+		void send(Control::Packet);
 
 
 
 	private:
 		void waitForNextPacket();
 		void readPacketHeader();
-		Container::Result<Packet> readPacketContents();
+		Container::Result<Control::Packet> readPacketContents();
 		bool checkHeaderCrc();
 		bool checkDataCrc();
 
-		void sendHeader(PacketHeader header);
-		void sendContents(PacketContents content);
+		void sendHeader(Control::PacketHeader header);
+		void sendContents(Control::PacketContents content, uint32_t);
 	};
 }
 #endif /* UTIL_PACKET_H_ */

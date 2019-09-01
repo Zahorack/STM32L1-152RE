@@ -9,28 +9,29 @@
 #include "Util/Trace.h"
 #include "Util/Bms.h"
 
-static Container::Queue<volatile Control::Packet, 10> s_priorityQueue;
+//static Container::Queue<volatile Control::Packet, 10> s_priorityQueue;
 
-namespace Control
+namespace Util
 {
 	Communication::Communication() :
 		m_rfModule(Periph::Usarts::Usart1, 57600),
-		m_timer(Util::Time::FromMilliSeconds(3000))
+		m_timer(Util::Time::FromSeconds(5))
 	{
 		m_timer.start();
 	}
 
-	Container::Result<Packet> Communication::update()
+	Container::Result<Control::Packet> Communication::update()
 	{
 		//TRACE("rx: %d\n\r", m_rfModule.bytesAvailable());
 
-		Container::Result<Control::Packet> attempt = m_handshaking.update();
-		if((attempt.isValid)) {
+		Container::Result<Control::Packet> attempt;
+
+		if((attempt = m_handshaking.update()).isValid) {
 			TRACE("Handshaking send attempt\n\r");
 			send(attempt.value);
 		}
 
-		if(m_timer.run()) {
+		if(m_timer.run() && m_state == WaitingForNextPacket) {
 			sendStatus();
 		}
 
@@ -47,13 +48,13 @@ namespace Control
 				return readPacketContents();
 		}
 
-		return Container::Result<Packet>();
+		return Container::Result<Control::Packet>();
 	}
 
 
 	void Communication::waitForNextPacket()
 	{
-		if(m_rfModule.bytesAvailable() > sizeof(PacketMark)) {
+		if(m_rfModule.bytesAvailable() > sizeof(Control::PacketMark)) {
 			if(m_rfModule.read() == 0x4C && m_rfModule.read() == 0x4B) {
 				m_state = ReadingPacketHeader;
 				//TRACE("markOK\n\r");
@@ -67,11 +68,11 @@ namespace Control
 	void Communication::readPacketHeader()
 	{
 		//TRACE("readPacketHeader\n\r");
-		if(m_rfModule.bytesAvailable() >= sizeof(PacketHeader) + sizeof(Crc)) {
+		if(m_rfModule.bytesAvailable() >= sizeof(Control::PacketHeader) + sizeof(Control::Crc)) {
 			m_rfModule.readStruct(m_currentPacket.header);
 
 			if(checkHeaderCrc()) {
-				TRACE("<- packet type[%d]\n\r", m_currentPacket.header.type);
+				TRACE("<- [%d]\n\r", m_currentPacket.header.type);
 				m_state = ReadingPacketContents;
 			}
 			else {
@@ -81,46 +82,46 @@ namespace Control
 		}
 	}
 
-	Container::Result<Packet> Communication::readPacketContents()
+	Container::Result<Control::Packet> Communication::readPacketContents()
 	{
 		//TRACE("readPacketContents\n\r");
-		if(Packet::SizeForType(m_currentPacket.header.type) > 0) {
-			if(m_rfModule.bytesAvailable() >= Packet::SizeForType(m_currentPacket.header.type) + sizeof(Crc)) {
+		if(Control::Packet::SizeForType(m_currentPacket.header.type) > 0) {
+			if(m_rfModule.bytesAvailable() >= Control::Packet::SizeForType(m_currentPacket.header.type) + sizeof(Control::Crc)) {
 				//m_rfModule.readStruct(m_currentPacket.contents);
-				m_rfModule.readBytes(reinterpret_cast<uint8_t *>(&m_currentPacket.contents), Packet::SizeForType(m_currentPacket.header.type));
+				m_rfModule.readBytes(reinterpret_cast<uint8_t *>(&m_currentPacket.contents), Control::Packet::SizeForType(m_currentPacket.header.type));
 
 				if(checkDataCrc()) {
 					//TRACE("dataOK\n\r");
-					if(m_currentPacket.header.type != PacketType::ManualControl){
+					if(m_currentPacket.header.type != Control::PacketType::ManualControl){
 						sendAck();
 					}
 					m_state = WaitingForNextPacket;
-					return Container::Result<Packet>(m_currentPacket);
+					return Container::Result<Control::Packet>(m_currentPacket);
 				}
 			}
 		}
 		else {
 			m_state = WaitingForNextPacket;
-			if(m_currentPacket.header.type != PacketType::Ack && m_currentPacket.header.type != PacketType::Nack) {
+			if(m_currentPacket.header.type != Control::PacketType::Ack && m_currentPacket.header.type != Control::PacketType::Nack) {
 				sendAck();
 			}
-			else if (m_currentPacket.header.type == PacketType::Ack) {
+			else if (m_currentPacket.header.type == Control::PacketType::Ack) {
 				m_handshaking.check(m_currentPacket);
 			}
 
-			return Container::Result<Packet>(m_currentPacket);
+			return Container::Result<Control::Packet>(m_currentPacket);
 		}
 
-		return Container::Result<Packet>();
+		return Container::Result<Control::Packet>();
 	}
 
 	bool Communication::checkHeaderCrc()
 	{
-		Crc crc = m_rfModule.read();
+		Control::Crc crc = m_rfModule.read();
 
-		if(crc != Packet::CalculateCRC8(m_currentPacket.header)) {
+		if(crc != Control::Packet::CalculateCRC8(m_currentPacket.header)) {
 			TRACE("HEADER CRC ERROR RX_CRC = %d    ", crc);
-			TRACE("CRC = %d\n\r", Packet::CalculateCRC8(m_currentPacket.contents));
+			TRACE("CRC = %d\n\r", Control::Packet::CalculateCRC8(m_currentPacket.header));
 			sendNack();
 			m_state = WaitingForNextPacket;
 			return false;
@@ -130,11 +131,13 @@ namespace Control
 
 	bool Communication::checkDataCrc()
 	{
-		Crc crc = m_rfModule.read();
+		Control::Crc crc = m_rfModule.read();
 
-		if(crc != Packet::CalculateCRC8(m_currentPacket.contents)) {
+		if(crc != Control::Packet::CalculateCRC8((uint8_t*)&m_currentPacket.contents, Control::Packet::SizeForType(m_currentPacket.header.type))) {
 			TRACE("DATA CRC ERROR RX_CRC = %d    ", crc);
-			TRACE("CRC = %d\n\r", Packet::CalculateCRC8(m_currentPacket.contents));
+			TRACE("CRC = %d\n\r", Control::Packet::CalculateCRC8((uint8_t*)&m_currentPacket.contents.dataPacket.joystickData, Control::Packet::SizeForType(m_currentPacket.header.type)));
+			//TRACE("size: %d\n\r", Control::Packet::SizeForType(m_currentPacket.header.type));
+			//TRACE("data : %d", m_currentPacket.contents.dataPacket.joystickData.x);
 			sendNack();
 			m_state = WaitingForNextPacket;
 
@@ -144,31 +147,32 @@ namespace Control
 		return true;
 	}
 
-	void Communication::sendHeader(PacketHeader header)
+	void Communication::sendHeader(Control::PacketHeader header)
 	{
-
-		m_rfModule.write((uint8_t*)&PacketMark, 2);
+		m_rfModule.write((uint8_t*)&Control::PacketMark, 2);
 		m_rfModule.writeStruct(header);
-		m_rfModule.write(Packet::CalculateCRC8(header));
+		m_rfModule.write(Control::Packet::CalculateCRC8(header));
 	}
 
-	void Communication::sendContents(PacketContents content)
+
+	 void Communication::sendContents(Control::PacketContents content, uint32_t size)
 	{
-		m_rfModule.writeStruct(content);
-		m_rfModule.write(Packet::CalculateCRC8(content));
+		m_rfModule.write((uint8_t*)&content, size);
+		m_rfModule.write(Control::Packet::CalculateCRC8((uint8_t*)&content, size));
 	}
 
-	void Communication::send(Packet packet)
+
+	void Communication::send(Control::Packet packet)
 	{
-		TRACE("-> packet type[%d]\n\r", packet.header.type);
+		TRACE("-> [%d]\n\r", packet.header.type);
 		sendHeader(packet.header);
-		sendContents(packet.contents);
+		sendContents(packet.contents, Control::Packet::SizeForType(packet.header.type));
 	}
 
-	void Communication::send(PacketType::Enum type)
+	void Communication::send(Control::PacketType::Enum type)
 	{
-		TRACE("-> packet type[%d]\n\r", type);
-		PacketHeader header = {
+		TRACE("-> [%d]\n\r", type);
+		Control::PacketHeader header = {
 				.id = m_transmitID++,
 				.type = type
 		};
@@ -177,30 +181,30 @@ namespace Control
 
 	void Communication::sendAck()
 	{
-		TRACE("-> packet ACK[%d]\n\r", PacketType::Ack);
-		PacketHeader ack = {
+		TRACE("-> packet ACK[%d]\n\r", Control::PacketType::Ack);
+		Control::PacketHeader ack = {
 				.id = m_currentPacket.header.id,
-				.type = PacketType::Ack
+				.type = Control::PacketType::Ack
 		};
 		sendHeader(ack);
 	}
 
 	void Communication::sendNack()
 	{
-		TRACE("-> packet NACK[%d]\n\r", PacketType::Nack);
-		PacketHeader nack = {
+		TRACE("-> packet NACK[%d]\n\r", Control::PacketType::Nack);
+		Control::PacketHeader nack = {
 				.id = m_currentPacket.header.id,
-				.type = PacketType::Nack
+				.type = Control::PacketType::Nack
 		};
 		sendHeader(nack);
 	}
 
 	void Communication::sendStatus()
 	{
-		Packet status;
+		Control::Packet status;
 
 		status.header.id = m_transmitID++;
-		status.header.type = PacketType::Status;
+		status.header.type = Control::PacketType::Status;
 
 		status.contents.statusPacket.batteryChargeLevel = g_batteryChargeLevel;
 		status.contents.statusPacket.uptime = 0;

@@ -71,7 +71,6 @@ void Usart::initRcc()
 
 		default: break;
 	}
-
 }
 
 void Usart::initGpio()
@@ -219,7 +218,7 @@ bool Usart::Available() const
 uint32_t Usart::bytesAvailable() const
 {
 	uint32_t volume = s_readQueues[id].size();
-//	DTRACE("Uart bytes available : %d \r\n", volume);
+	HAL_UART_Receive_IT(&Periph::huart[id], &Periph::rxByte[id], 1);
 
 	return volume;
 }

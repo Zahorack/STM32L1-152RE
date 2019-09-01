@@ -9,10 +9,11 @@
 #include "Util/Trace.h"
 #include "Util/Handshaking.h"
 
+
 namespace Util {
 
 Handshaking::Handshaking():
-	m_timer(Util::Time::FromMilliSeconds(20)),
+	m_timer(Util::Time::FromMilliSeconds(100)),
 	m_state(HandshakingStates::Free)
 {
 	m_timer.start();
@@ -27,7 +28,7 @@ bool Handshaking::add(Control::Packet packet)
 Container::Result<Control::Packet> Handshaking::update()
 {
 	if(m_timer.run()) {
-		return (m_packetQueue.value());
+		return m_packetQueue.value();
 	}
 
 	return Container::Result<Control::Packet>();
@@ -42,7 +43,6 @@ bool Handshaking::check(Control::Packet ack)
 
 		return true;
 	}
-
 	return false;
 }
 

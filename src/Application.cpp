@@ -50,7 +50,7 @@ void Application::run()
 			control.command(Control::PacketType::OpenRightFeeder);
 
 		control.update();
-		//bms.update();
+		bms.update();
 
 		if(timer.run()) {
 			//communication.sendStatus();
