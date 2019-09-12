@@ -150,12 +150,12 @@ float Bms::getBatteryVoltage()
 void Bms::update()
 {
 	if(m_measTimer.run()) {
-		m_batteryVoltage = KalmanFilter(readBatteryVoltage());
+		m_batteryVoltage = /*KalmanFilter*/(readBatteryVoltage());
 	}
 
 	if(m_checkTimer.run()) {
 		m_uptime++;
-		TRACE("Battery charge level: %d\n\r", getChargeLevel());
+		TRACE("Battery charge level: %d / voltage : %f\n\r", getChargeLevel(), readBatteryVoltage());
 
 		if(getChargeLevel() == 0 && m_uptime > 5) {
 			m_buzzer.start();
