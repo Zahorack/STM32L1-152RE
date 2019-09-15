@@ -34,9 +34,9 @@ namespace Control
 	}
 
 	class Control {
-
-		Periph::Engine m_engine_left, m_engine_right;
 		Periph::Feeder m_feeder;
+		Periph::Engine m_engine_left, m_engine_right;
+
 
 		Util::Timer
 			m_watchdog = Util::Timer(Util::Time::FromSeconds(1)),
@@ -53,6 +53,7 @@ namespace Control
 		void stop();
 
 		void setControlData(const ManualControlPacket &controlData);
+		void setCalibrationData(ManualCalibrationPacket &calibrationData);
 		void command(PacketType::Enum cmd);
 
 		void update();

@@ -22,7 +22,8 @@ namespace Control
 			Status,
 			ManualControl,
 			OpenLeftFeeder,
-			OpenRightFeeder
+			OpenRightFeeder,
+			ManualCalibration
 		};
 	}
 
@@ -55,6 +56,11 @@ namespace Control
 		uint8_t batteryChargeLevel;
 	};
 
+	struct __attribute__((packed)) ManualCalibrationPacket {
+		int8_t directionCalibration;
+		uint8_t maxPower;
+	};
+
 	struct __attribute__((packed)) ManualControlPacket {
 		axe_t 	joystickData;
 	};
@@ -64,6 +70,7 @@ namespace Control
 		AckPacket ackPacket;
 		StatusPacket statusPacket;
 		ManualControlPacket dataPacket;
+		ManualCalibrationPacket calibrationPacket;
 	};
 
 	using Crc = uint8_t;

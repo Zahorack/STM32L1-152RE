@@ -113,6 +113,9 @@ uint8_t Bms::getChargeLevel()
 			Battery::DischargeTable[Battery::Level100])) {
 		level = 100;
 	}
+	else if(m_batteryVoltage > Battery::DischargeTable[Battery::Level100]) {
+		level = 100;
+	}
 
 	return level;
 }

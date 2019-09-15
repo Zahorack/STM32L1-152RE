@@ -53,6 +53,11 @@ namespace Control
 		}
 	}
 
+	void Control::setCalibrationData(ManualCalibrationPacket &calibrationData)
+	{
+		m_manualControlMode.setCalibrationData(calibrationData);
+	}
+
 	void Control::command(PacketType::Enum cmd)
 	{
 		TRACE("cmd : %d", cmd);

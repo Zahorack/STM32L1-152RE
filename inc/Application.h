@@ -31,10 +31,11 @@ class Application {
 
 
 public:
+	Control::Control control;
 	Util::Logger logger;
 	Periph::Usart usartLog;
 
-	Control::Control control;
+
 	Util::Communication communication;
 	Util::Bms bms;
 

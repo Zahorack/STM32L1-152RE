@@ -43,10 +43,13 @@ void Application::run()
 		if(communicationResult.isValid && communicationResult.value.header.type == Control::PacketType::ManualControl)
 			control.setControlData(communicationResult.value.contents.dataPacket);
 
-		if(communicationResult.isValid && communicationResult.value.header.type == Control::PacketType::OpenLeftFeeder)
+		else if(communicationResult.isValid && communicationResult.value.header.type == Control::PacketType::ManualCalibration)
+			control.setCalibrationData(communicationResult.value.contents.calibrationPacket);
+
+		else if(communicationResult.isValid && communicationResult.value.header.type == Control::PacketType::OpenLeftFeeder)
 			control.command(Control::PacketType::OpenLeftFeeder);
 
-		if(communicationResult.isValid && communicationResult.value.header.type == Control::PacketType::OpenRightFeeder)
+		else if(communicationResult.isValid && communicationResult.value.header.type == Control::PacketType::OpenRightFeeder)
 			control.command(Control::PacketType::OpenRightFeeder);
 
 		control.update();

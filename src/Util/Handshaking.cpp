@@ -13,7 +13,7 @@
 namespace Util {
 
 Handshaking::Handshaking():
-	m_timer(Util::Time::FromMilliSeconds(100)),
+	m_timer(Util::Time::FromMilliSeconds(200)),
 	m_state(HandshakingStates::Free)
 {
 	m_timer.start();
@@ -21,6 +21,10 @@ Handshaking::Handshaking():
 
 bool Handshaking::add(Control::Packet packet)
 {
+	if(packet.header.type == m_packetQueue.value().value.header.type) {
+		return false;
+	}
+
 	return m_packetQueue.enqueue(packet);
 }
 

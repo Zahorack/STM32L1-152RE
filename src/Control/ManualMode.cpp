@@ -12,6 +12,12 @@
 
 namespace Control
 {
+	ManualMode::ManualMode()
+	{
+		m_calibration.directionCalibration = 0;
+		m_calibration.maxPower = 90;
+	}
+
 	void ManualMode::setControlData(
 			const ManualControlPacket &controlData,
 			Periph::Engine m_engine_left, Periph::Engine m_engine_right
@@ -42,17 +48,25 @@ namespace Control
 		}
 
 
-		leftSpeed = Util::clamp<uint8_t>(Util::map<uint8_t>(leftSpeed, 0, 100, 50, 95), 0, 100);
-		rightSpeed = Util::clamp<uint8_t>(Util::map<uint8_t>(rightSpeed, 0, 100, 50, 95), 0, 100);
-
+		leftSpeed = Util::clamp<uint8_t>(Util::map<uint8_t>(leftSpeed, 0, 100, 50, m_calibration.maxPower - m_calibration.directionCalibration), 0, 100);
+		rightSpeed = Util::clamp<uint8_t>(Util::map<uint8_t>(rightSpeed, 0, 100, 50, m_calibration.maxPower + m_calibration.directionCalibration), 0, 100);
 
 		m_engine_left.setTargetSpeed(leftSpeed > 55 ? leftSpeed : 0);
 		m_engine_right.setTargetSpeed(rightSpeed > 55 ? rightSpeed : 0);
 
-
-
 		m_engine_left.start();
 		m_engine_right.start();
 
+	}
+
+	void ManualMode::setCalibrationData(ManualCalibrationPacket &data)
+	{
+		if(Util::inRange<int8_t>(data.directionCalibration, -100, 100) &&
+			Util::inRange<uint8_t>(data.maxPower, 0, 100))
+		{
+			memcpy(&m_calibration, &data, sizeof(ManualCalibrationPacket));
+			TRACE("L:%d\n\r", m_calibration.directionCalibration);
+			TRACE("P:%d\n\r", m_calibration.maxPower);
+		}
 	}
 }

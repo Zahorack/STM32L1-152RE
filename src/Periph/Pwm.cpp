@@ -182,6 +182,7 @@ namespace Periph
 //		write(Pwms::Pwm6, ServoHomePosition);
 //		write(Pwms::Pwm7, ServoHomePosition);
 //		write(Pwms::Pwm8, ServoHomePosition);
+		write(Pwms::Pwm5, ServoHomePosition);
 	}
 
 	Pwm::~Pwm()

@@ -10,6 +10,7 @@
 
 #include "Util/Communication.h"
 #include "Periph/Engine.h"
+#include "Control/Packet.h"
 
 namespace Control
 {
@@ -20,11 +21,16 @@ namespace Control
 		JoystickTreshold = 2;
 
 	class ManualMode {
+		ManualCalibrationPacket m_calibration;
+
 	public:
+		ManualMode();
 		void setControlData(
 				const ManualControlPacket &controlData,
 				Periph::Engine m_engine_left, Periph::Engine m_engine_right
 				);
+
+		void setCalibrationData(ManualCalibrationPacket &data);
 	};
 }
 

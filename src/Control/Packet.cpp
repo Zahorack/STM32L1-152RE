@@ -35,7 +35,8 @@ namespace Control
 			sizeof(StatusPacket),
 			sizeof(ManualControlPacket),
 			0 /*sizeof(OpenLeftFeederPacket)*/,
-			0 /*sizeof(OpenRightFeederPacket)*/
+			0 /*sizeof(OpenRightFeederPacket)*/,
+			sizeof(ManualCalibrationPacket)
 
 	};
 
