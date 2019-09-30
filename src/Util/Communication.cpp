@@ -27,7 +27,7 @@ namespace Util
 		Container::Result<Control::Packet> attempt;
 
 		if((attempt = m_handshaking.update()).isValid) {
-			TRACE("Handshaking send attempt\n\r");
+			//TRACE("Handshaking send attempt\n\r");
 			send(attempt.value);
 		}
 
@@ -164,14 +164,14 @@ namespace Util
 
 	void Communication::send(Control::Packet packet)
 	{
-		TRACE("-> [%d]\n\r", packet.header.type);
+		//TRACE("-> [%d]\n\r", packet.header.type);
 		sendHeader(packet.header);
 		sendContents(packet.contents, Control::Packet::SizeForType(packet.header.type));
 	}
 
 	void Communication::send(Control::PacketType::Enum type)
 	{
-		TRACE("-> [%d]\n\r", type);
+		//TRACE("-> [%d]\n\r", type);
 		Control::PacketHeader header = {
 				.id = m_transmitID++,
 				.type = type

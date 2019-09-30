@@ -123,7 +123,7 @@ uint8_t Bms::getChargeLevel()
 Bms::Bms():
 	m_adc(Periph::AdcPins::AdcPin1),
 	m_measTimer(Util::Time::FromMilliSeconds(200)),
-	m_checkTimer(Util::Time::FromSeconds(1)),
+	m_checkTimer(Util::Time::FromSeconds(5)),
 	m_buzzer(Periph::Buzzers::Buzzer1),
 	m_batteryVoltage(0),
 	m_batteryLevel(0),
@@ -132,7 +132,6 @@ Bms::Bms():
 {
 	m_measTimer.start();
 	m_checkTimer.start();
-
 	//m_buzzer.start();
 }
 

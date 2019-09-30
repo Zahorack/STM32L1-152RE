@@ -5,6 +5,7 @@
 #include "Application.h"
 #include "Util/Timer.h"
 #include "Util/Trace.h"
+
 LOGGER_MODULE(Application)
 
 Application *Application::m_instance = nullptr;
@@ -19,7 +20,8 @@ Application::Application() :
 	m_applicationInitializator(this),
 	logger(&usartLog),
 	usartLog(Periph::Usarts::Usart3, 9600),
-	m_appRunningLed(Periph::Leds::Green)
+	m_appRunningLed(Periph::Leds::Green),
+	ultrasonic(Periph::Ultrasonics::Ultrasonic1)
 {
 	HAL_Init();
 	SystemCoreClockUpdate();
@@ -32,7 +34,7 @@ void Application::run()
 
 	//communication.sendStatus();
 
-	Util::Timer timer(Util::Time::FromMilliSeconds(1000));
+	Util::Timer timer(Util::Time::FromSeconds(60));
 	timer.start();
 
 	/* @non-terminating@ */
@@ -60,7 +62,15 @@ void Application::run()
 			//communication.sendStatus();
 			//INF_LOG("Tick");
 			//TRACE("Tick\n\r");
+			TRACE("micros: %lld \n\r", finetimer.read());
 		}
+
+		static uint64_t last_micros = 0;
+//
+//		if(finetimer.read() > (last_micros + 100000)) {
+//			TRACE("Second\n\r");
+//			last_micros = finetimer.read();
+//		}
 	}
 
 	INF_LOG("Application ended.");

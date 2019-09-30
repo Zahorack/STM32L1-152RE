@@ -17,6 +17,8 @@
 #include "Util/Bms.h"
 #include "Periph/Adc.h"
 #include "Periph/AdcIT.h"
+#include "Periph/FineTimer.h"
+#include "Periph/Ultrasonic.h"
 
 #include "Control/Control.h"
 #include "Util/Communication.h"
@@ -38,6 +40,9 @@ public:
 
 	Util::Communication communication;
 	Util::Bms bms;
+
+	Periph::FineTimer finetimer;
+	Periph::Ultrasonic ultrasonic;
 
 private:
 	Periph::Led m_appRunningLed;
