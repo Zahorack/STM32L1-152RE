@@ -37,6 +37,8 @@ void Application::run()
 	Util::Timer timer(Util::Time::FromSeconds(60));
 	timer.start();
 
+	ultrasonic.trigger();
+
 	/* @non-terminating@ */
 	for(;;) {
 
@@ -56,13 +58,18 @@ void Application::run()
 
 		control.update();
 		bms.update();
+		ultrasonic.update();
+
+		if(ultrasonic.availbale()) {
+			TRACE("echo: %lld \n\r", ultrasonic.read().value);
+			ultrasonic.trigger();
+		}
 
 		if(timer.run()) {
 			//communication.sendStatus();
 			//communication.sendStatus();
 			//INF_LOG("Tick");
 			//TRACE("Tick\n\r");
-			TRACE("micros: %lld \n\r", finetimer.read());
 		}
 
 		static uint64_t last_micros = 0;
@@ -72,7 +79,6 @@ void Application::run()
 //			last_micros = finetimer.read();
 //		}
 	}
-
 	INF_LOG("Application ended.");
 
 

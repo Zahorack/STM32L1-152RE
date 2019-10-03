@@ -20,6 +20,7 @@
 #include "Periph/FineTimer.h"
 #include "Periph/Ultrasonic.h"
 
+
 #include "Control/Control.h"
 #include "Util/Communication.h"
 
@@ -40,8 +41,6 @@ public:
 
 	Util::Communication communication;
 	Util::Bms bms;
-
-	Periph::FineTimer finetimer;
 	Periph::Ultrasonic ultrasonic;
 
 private:

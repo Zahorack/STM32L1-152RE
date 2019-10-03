@@ -9,6 +9,9 @@
 #define ULTRASONIC_H_
 
 #include "stm32l1xx.h"
+#include "Util/Timer.h"
+#include "Periph/SysTickCounter.h"
+#include "Container/Result.h"
 
 namespace Periph {
 
@@ -27,20 +30,34 @@ enum Enum : uint8_t {
 namespace PinFunction {
 enum Enum : uint8_t {
 	Echo = 0,
-	Trigger
+	Trigger,
+
+	None
 };
 }
-
 
 class Ultrasonic {
 
 	const Ultrasonics::Enum m_id;
 	PinFunction::Enum m_mode;
+
+	Util::Timer m_timer;
+	Util::Timer m_pulseTimer;
+	Util::Timer m_silenceTimer;
+	Periph::SysTickCounter m_sysTick;
+
 public:
 	Ultrasonic(Ultrasonics::Enum id);
 
 	void update();
 	void configure(PinFunction::Enum fcn);
+
+	void trigger();
+	bool availbale();
+
+	Container::Result<uint64_t> read();
+
+
 
 
 
