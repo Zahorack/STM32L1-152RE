@@ -15,9 +15,6 @@ namespace Periph {
 
 class FineTimer {
 
-	uint64_t m_microseconds;
-	uint64_t m_miliseconds;
-
 public:
 	FineTimer();
 

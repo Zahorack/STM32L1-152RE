@@ -11,15 +11,16 @@
 namespace Periph {
 
 static TIM_HandleTypeDef TIM_Handle;
-static uint64_t timer_micro_seconds = 0;
+static uint64_t s_periods = 0;
+static const uint16_t TimerPeriod = 0xFFFF;
 
 static void init(){
 	__TIM7_CLK_ENABLE();   //16MHz
 	TRACE("PCLK7  %d\n\r",HAL_RCC_GetPCLK1Freq());
 
-	TIM_Handle.Init.Prescaler = 16*10;
+	TIM_Handle.Init.Prescaler = 32;
 	TIM_Handle.Init.CounterMode = TIM_COUNTERMODE_UP;
-	TIM_Handle.Init.Period = 1;
+	TIM_Handle.Init.Period = 0xFFFF;
 	TIM_Handle.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
 	TIM_Handle.Instance = TIM7;
 
@@ -32,21 +33,19 @@ static void init(){
 	TRACE("TIMER 7 INIT OK\n\r");
 }
 
-FineTimer::FineTimer():
-	m_microseconds(0),
-	m_miliseconds(0)
+FineTimer::FineTimer()
 {
 	init();
 }
 
 uint64_t FineTimer::read()
 {
-	return timer_micro_seconds*10;
+	return s_periods*(0xFFFF) + __HAL_TIM_GET_COUNTER(&TIM_Handle);;
 }
 
 void FineTimer::update()
 {
-
+//    TRACE("%d\n\r",__HAL_TIM_GET_COUNTER(&TIM_Handle));
 }
 
 
@@ -56,11 +55,8 @@ extern "C" void TIM7_IRQHandler(void)
 		if (__HAL_TIM_GET_ITSTATUS(&TIM_Handle, TIM_IT_UPDATE) != RESET){
 			__HAL_TIM_CLEAR_FLAG(&TIM_Handle, TIM_FLAG_UPDATE);
 			/*put your code here */
-			timer_micro_seconds++;
-//			if(timer_micro_seconds >= 1000000) {
-//				//TRACE("M\n\r");
-//				timer_micro_seconds = 0;
-//			}
+			//TRACE("TIM7_IRQHandler\n\r");
+            s_periods++;
 		}
 	}
 }

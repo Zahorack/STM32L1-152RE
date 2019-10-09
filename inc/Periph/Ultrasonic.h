@@ -27,38 +27,39 @@ enum Enum : uint8_t {
 };
 }
 
-namespace PinFunction {
+namespace UltrasonicStates {
 enum Enum : uint8_t {
 	Echo = 0,
 	Trigger,
+	Silent,
 
 	None
 };
 }
 
+    typedef struct {
+        uint32_t echoTime;
+        uint32_t pulseTime;
+    }ultrasonicResult_t;
+
 class Ultrasonic {
 
 	const Ultrasonics::Enum m_id;
-	PinFunction::Enum m_mode;
+    UltrasonicStates::Enum m_state;
 
 	Util::Timer m_timer;
-	Util::Timer m_pulseTimer;
-	Util::Timer m_silenceTimer;
 	Periph::SysTickCounter m_sysTick;
 
 public:
 	Ultrasonic(Ultrasonics::Enum id);
 
 	void update();
-	void configure(PinFunction::Enum fcn);
+	void configure(UltrasonicStates::Enum fcn);
 
 	void trigger();
 	bool availbale();
 
-	Container::Result<uint64_t> read();
-
-
-
+	Container::Result<ultrasonicResult_t> read();
 
 
 };

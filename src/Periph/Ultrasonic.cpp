@@ -21,13 +21,16 @@ typedef struct {
 	uint8_t last_edge;
 	uint64_t echoTime;
 	uint64_t triggerTime;
+	uint64_t endTime;
 	kalmanArgs_t kalman_args;
 } ultrasonicArgs_t;
 
+
+
 namespace Edges {
 enum  : uint8_t {
-	rising_edge = 0,
-	falling_edge
+	Rising = 0,
+	Falling
 };
 }
 
@@ -36,8 +39,8 @@ static ultrasonicArgs_t UltrasonicArgs[Ultrasonics::Size];
 Periph::FineTimer s_micros;
 
 
-static const uint8_t MaxPulseWidth = 50;
-static const uint8_t SilenceWidth = 100;
+static const uint32_t TriggerPulseWidthMicros = 500;
+static const uint32_t SilenceWidthMicros = TriggerPulseWidthMicros + 1000;
 
 static const struct {
 	GPIO_TypeDef *port;
@@ -51,24 +54,22 @@ static const struct {
 	},
 	{/* Ultrasonic2 */
 			port: GPIOB,
-			pin: GPIO_PIN_10,
-			Irs: EXTI15_10_IRQn,
+			.pin =  GPIO_PIN_10,
+			.Irs =  EXTI15_10_IRQn,
 	}
 };
 
 Ultrasonic::Ultrasonic(Ultrasonics::Enum id):
 	m_id(id),
-	m_mode(PinFunction::None),
-	m_timer(Util::Time::FromMilliSeconds(100)),
-	m_pulseTimer(Util::Time::FromMilliSeconds(MaxPulseWidth)),
-	m_silenceTimer(Util::Time::FromMilliSeconds(SilenceWidth))
+    m_state(UltrasonicStates::None),
+	m_timer(Util::Time::FromMilliSeconds(100))
 {
-	configure(PinFunction::Echo);
+	configure(UltrasonicStates::Trigger);
 	m_timer.start();
 }
 
 
-void Ultrasonic::configure(PinFunction::Enum fcn)
+void Ultrasonic::configure(UltrasonicStates::Enum fcn)
 {
 	if(config[m_id].port == GPIOA)
 		__GPIOA_CLK_ENABLE();
@@ -90,89 +91,109 @@ void Ultrasonic::configure(PinFunction::Enum fcn)
 	GPIO_InitTypeDef init;
 	init.Pin = static_cast<uint32_t>(config[m_id].pin);
 
-	if(fcn == PinFunction::Echo) {
-		TRACE("Echo");
-		init.Mode = 	GPIO_MODE_IT_FALLING;
+	if(fcn == UltrasonicStates::Echo) {
+		//TRACE("Echo");
+		init.Mode = 	GPIO_MODE_IT_RISING_FALLING;
 		init.Pull = 	GPIO_PULLUP;
 		HAL_NVIC_SetPriority(config[m_id].Irs, 3, 0);
 		HAL_NVIC_EnableIRQ(config[m_id].Irs);
 	}
-	else if(fcn == PinFunction::Trigger) {
-		TRACE("Trigger");
+	else if(fcn == UltrasonicStates::Trigger) {
+		//TRACE("Trigger");
 		init.Mode = 	GPIO_MODE_OUTPUT_OD;
 		init.Pull = 	GPIO_PULLUP;
 		HAL_NVIC_DisableIRQ(config[m_id].Irs);
 	}
 
-	init.Speed = 	GPIO_SPEED_HIGH;
+	init.Speed = 	GPIO_SPEED_FREQ_VERY_HIGH;
 	HAL_GPIO_Init(config[m_id].port, &init);
 
-	TRACE("Ultrasonic inti ok \n\r");
+	//TRACE("Ultrasonic inti ok \n\r");
 }
 
 void Ultrasonic::trigger()
 {
-	configure(PinFunction::Trigger);
+	configure(UltrasonicStates::Trigger);
 
-	m_mode = PinFunction::Trigger;
+    m_state = UltrasonicStates::Trigger;
 	UltrasonicArgs[m_id].data_ready = false;
-	m_pulseTimer.start();
-
-	UltrasonicArgs[m_id].triggerTime = s_micros.read();
 
 	HAL_GPIO_WritePin(config[m_id].port,config[m_id].pin, GPIO_PIN_RESET);
+    UltrasonicArgs[m_id].triggerTime = s_micros.read();
+    //TRACE("Trigger %8llu \n\r", s_micros.read());
 }
 
 void Ultrasonic::update()
 {
+    s_micros.update();
+
 	if(m_timer.run()) {
 
 	}
 
-	if(m_mode == PinFunction::Trigger) {
-		if(m_pulseTimer.run()) {
-			m_pulseTimer.stop();
-			HAL_GPIO_WritePin(config[m_id].port,config[m_id].pin, GPIO_PIN_SET);
 
-			m_silenceTimer.start();
-		}
-		if(m_silenceTimer.run()) {
-			m_silenceTimer.stop();
-			m_mode = PinFunction::Echo;
+	if(m_state == UltrasonicStates::Trigger) {
+		if(s_micros.read() > (UltrasonicArgs[m_id].triggerTime + TriggerPulseWidthMicros)) {
 
-			configure(PinFunction::Echo);
-			/*reconfigure gpio*/
-		}
-	}
+            HAL_GPIO_WritePin(config[m_id].port, config[m_id].pin, GPIO_PIN_SET);
+//            TRACE("%d \n\r", (uint32_t)(s_micros.read()-UltrasonicArgs[m_id].triggerTime));
+            m_state = UltrasonicStates::Silent;
+        }
+    }
 
-	if(m_mode == PinFunction::Echo) {
+    if(m_state == UltrasonicStates::Silent) {
+        if (s_micros.read() > (UltrasonicArgs[m_id].triggerTime + SilenceWidthMicros)) {
+            m_state = UltrasonicStates::Echo;
+            configure(UltrasonicStates::Echo);
+        }
+    }
+
+	if(m_state == UltrasonicStates::Echo) {
 
 	}
 }
 
-Container::Result<uint64_t> Ultrasonic::read()
+Container::Result<ultrasonicResult_t> Ultrasonic::read()
 {
-	Container::Result<uint64_t> result;
+	Container::Result<ultrasonicResult_t> result;
 
 	if(UltrasonicArgs[m_id].data_ready){
-		result.value =  (UltrasonicArgs[m_id].echoTime - UltrasonicArgs[m_id].triggerTime);
+		result.value.echoTime =  (uint32_t)(UltrasonicArgs[m_id].echoTime - UltrasonicArgs[m_id].triggerTime);
+        result.value.pulseTime =  (uint32_t)(UltrasonicArgs[m_id].endTime - UltrasonicArgs[m_id].echoTime);
 		return result;
 	}
 
-	return Container::Result<uint64_t>();
+	return Container::Result<ultrasonicResult_t>();
 }
 
 static void UltrasonicHandler(Ultrasonics::Enum id)
 {
-	uint8_t current_edge = HAL_GPIO_ReadPin(Periph::config[id].port, Periph::config[id].pin) ? Periph::Edges::rising_edge : Periph::Edges::falling_edge;
+	uint8_t current_edge = HAL_GPIO_ReadPin(Periph::config[id].port, Periph::config[id].pin) ? Periph::Edges::Rising : Periph::Edges::Falling;
 
-	UltrasonicArgs[id].data_ready = true;
-	UltrasonicArgs[id].echoTime = s_micros.read();
+	if(UltrasonicArgs[id].data_ready != true) {
+        if (UltrasonicArgs[id].last_edge == Periph::Edges::Rising && current_edge == Periph::Edges::Falling) {
+            UltrasonicArgs[id].echoTime = s_micros.read();
+            //UltrasonicArgs[id].data_ready = true;
+            UltrasonicArgs[id].last_edge = current_edge;
+//            TRACE("F\n\r");
+        }
+        if (UltrasonicArgs[id].last_edge == Periph::Edges::Falling && current_edge == Periph::Edges::Rising) {
+            UltrasonicArgs[id].endTime = s_micros.read();
+            UltrasonicArgs[id].data_ready = true;
+            UltrasonicArgs[id].last_edge = current_edge;
+//            TRACE("R\n\r");
+        }
+   }
 }
 
 bool Ultrasonic::availbale()
 {
-	return UltrasonicArgs[m_id].data_ready;
+    bool ret = UltrasonicArgs[m_id].data_ready;
+    if(ret == true) {
+//        TRACE("Data ready");
+        return true;
+    }
+	return false;
 }
 
 
@@ -218,7 +239,7 @@ extern "C" void EXTI4_IRQHandler(void)
 
 extern "C" void EXTI9_5_IRQHandler(void)
 {
-	TRACE("EXTI9_5_IRQHandler\n\r");
+//	TRACE("EXTI9_5_IRQHandler\n\r");
 
 	if(__HAL_GPIO_EXTI_GET_FLAG(GPIO_PIN_8)){
 

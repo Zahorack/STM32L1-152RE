@@ -12,7 +12,7 @@ Application *Application::m_instance = nullptr;
 
 Application::ApplicationInitializator::ApplicationInitializator(Application *parent)
 {
-	m_instance = parent;
+    m_instance = parent;
 
 }
 
@@ -34,38 +34,50 @@ void Application::run()
 
 	//communication.sendStatus();
 
-	Util::Timer timer(Util::Time::FromSeconds(60));
+	Util::Timer timer(Util::Time::FromMilliSeconds(200));
 	timer.start();
+
 
 	ultrasonic.trigger();
 
 	/* @non-terminating@ */
 	for(;;) {
+//
+//		Container::Result<Control::Packet> communicationResult = communication.update();
+//
+//		if(communicationResult.isValid && communicationResult.value.header.type == Control::PacketType::ManualControl)
+//			control.setControlData(communicationResult.value.contents.dataPacket);
+//
+//		else if(communicationResult.isValid && communicationResult.value.header.type == Control::PacketType::ManualCalibration)
+//			control.setCalibrationData(communicationResult.value.contents.calibrationPacket);
+//
+//		else if(communicationResult.isValid && communicationResult.value.header.type == Control::PacketType::OpenLeftFeeder)
+//			control.command(Control::PacketType::OpenLeftFeeder);
+//
+//		else if(communicationResult.isValid && communicationResult.value.header.type == Control::PacketType::OpenRightFeeder)
+//			control.command(Control::PacketType::OpenRightFeeder);
+//
+//		control.update();
+//		bms.update();
 
-		Container::Result<Control::Packet> communicationResult = communication.update();
 
-		if(communicationResult.isValid && communicationResult.value.header.type == Control::PacketType::ManualControl)
-			control.setControlData(communicationResult.value.contents.dataPacket);
 
-		else if(communicationResult.isValid && communicationResult.value.header.type == Control::PacketType::ManualCalibration)
-			control.setCalibrationData(communicationResult.value.contents.calibrationPacket);
 
-		else if(communicationResult.isValid && communicationResult.value.header.type == Control::PacketType::OpenLeftFeeder)
-			control.command(Control::PacketType::OpenLeftFeeder);
+        ultrasonic.update();
 
-		else if(communicationResult.isValid && communicationResult.value.header.type == Control::PacketType::OpenRightFeeder)
-			control.command(Control::PacketType::OpenRightFeeder);
 
-		control.update();
-		bms.update();
-		ultrasonic.update();
-
-		if(ultrasonic.availbale()) {
-			TRACE("echo: %lld \n\r", ultrasonic.read().value);
-			ultrasonic.trigger();
-		}
 
 		if(timer.run()) {
+            if(ultrasonic.availbale() == true) {
+
+                TRACE("echo: %d   ", ultrasonic.read().value.echoTime);
+                TRACE("pulse: %d \n\r", ultrasonic.read().value.pulseTime);
+
+            }
+            ultrasonic.trigger();
+
+//            TRACE("echo: %d \n\r", ultrasonic.read().value);
+//            ultrasonic.trigger();
 			//communication.sendStatus();
 			//communication.sendStatus();
 			//INF_LOG("Tick");
