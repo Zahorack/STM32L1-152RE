@@ -132,6 +132,7 @@ void Ultrasonic::update()
     if(s_micros.read() > (UltrasonicArgs[m_id].triggerTime + MaxEchoTimeMicros) && m_state == UltrasonicStates::Echo) {
         if(!UltrasonicArgs[m_id].data_ready)
             trigger();
+
     }
 
 	if(m_state == UltrasonicStates::Trigger) {
@@ -240,7 +241,7 @@ extern "C" void EXTI9_5_IRQHandler(void)
 	if(__HAL_GPIO_EXTI_GET_FLAG(GPIO_PIN_8)){
 
 		UltrasonicHandler(Ultrasonics::Ultrasonic1);
-        TRACE("E\n\r");
+//        TRACE("E\n\r");
 	}
 
 	HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_8);

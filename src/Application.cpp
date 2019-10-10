@@ -34,7 +34,7 @@ void Application::run()
 
 	//communication.sendStatus();
 
-	Util::Timer timer(Util::Time::FromMilliSeconds(2000));
+	Util::Timer timer(Util::Time::FromMilliSeconds(200));
 	timer.start();
 
 
