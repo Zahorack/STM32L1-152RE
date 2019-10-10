@@ -37,10 +37,30 @@ enum Enum : uint8_t {
 };
 }
 
-    typedef struct {
-        uint32_t echoTime;
-        uint32_t pulseTime;
-    }ultrasonicResult_t;
+namespace UltrasonicWaves {
+enum Enum : uint8_t {
+    Echo1 = 0,
+    Echo2,
+    Echo3,
+    Echo4,
+    Echo5,
+    Echo6,
+    Echo7,
+    Echo8,
+    Echo9,
+
+    Size
+};
+}
+typedef struct {
+    uint64_t echoTime;
+    uint64_t endTime;
+} wavesArgs_t;
+
+typedef struct {
+    uint32_t echoInterval[UltrasonicWaves::Size];
+    uint32_t pulseInterval[UltrasonicWaves::Size];
+}ultrasonicResult_t;
 
 class Ultrasonic {
 
@@ -50,6 +70,10 @@ class Ultrasonic {
 	Util::Timer m_timer;
 	Periph::SysTickCounter m_sysTick;
 
+	void initRcc();
+
+	void evaluate(Container::Result<ultrasonicResult_t> *, UltrasonicWaves::Enum);
+
 public:
 	Ultrasonic(Ultrasonics::Enum id);
 
@@ -57,7 +81,7 @@ public:
 	void configure(UltrasonicStates::Enum fcn);
 
 	void trigger();
-	bool availbale();
+	bool available();
 
 	Container::Result<ultrasonicResult_t> read();
 

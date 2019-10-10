@@ -5,6 +5,7 @@
 #include "Application.h"
 #include "Util/Timer.h"
 #include "Util/Trace.h"
+#include "Periph/Ultrasonic.h"
 
 LOGGER_MODULE(Application)
 
@@ -19,7 +20,7 @@ Application::ApplicationInitializator::ApplicationInitializator(Application *par
 Application::Application() :
 	m_applicationInitializator(this),
 	logger(&usartLog),
-	usartLog(Periph::Usarts::Usart3, 9600),
+	usartLog(Periph::Usarts::Usart3, 576000),
 	m_appRunningLed(Periph::Leds::Green),
 	ultrasonic(Periph::Ultrasonics::Ultrasonic1)
 {
@@ -34,7 +35,7 @@ void Application::run()
 
 	//communication.sendStatus();
 
-	Util::Timer timer(Util::Time::FromMilliSeconds(200));
+	Util::Timer timer(Util::Time::FromMilliSeconds(1000));
 	timer.start();
 
 
@@ -68,10 +69,14 @@ void Application::run()
 
 
 		if(timer.run()) {
-            if(ultrasonic.availbale() == true) {
+            if(ultrasonic.available() == true) {
+                Container::Result<Periph::ultrasonicResult_t> result = ultrasonic.read();
 
-                TRACE("echo: %d   ", ultrasonic.read().value.echoTime);
-                TRACE("pulse: %d \n\r", ultrasonic.read().value.pulseTime);
+                for(int i = 0; i < Periph::UltrasonicWaves::Size; i++) {
+                    TRACE("echo: %d   ", result.value.echoInterval[i]);
+                    TRACE("pulse: %d \n", result.value.pulseInterval[i]);
+                }
+                TRACE("\n");
                 ultrasonic.trigger();
             }
 
