@@ -34,7 +34,7 @@ void Application::run()
 
 	//communication.sendStatus();
 
-	Util::Timer timer(Util::Time::FromMilliSeconds(200));
+	Util::Timer timer(Util::Time::FromMilliSeconds(2000));
 	timer.start();
 
 
@@ -72,9 +72,9 @@ void Application::run()
 
                 TRACE("echo: %d   ", ultrasonic.read().value.echoTime);
                 TRACE("pulse: %d \n\r", ultrasonic.read().value.pulseTime);
-
+                ultrasonic.trigger();
             }
-            ultrasonic.trigger();
+
 
 //            TRACE("echo: %d \n\r", ultrasonic.read().value);
 //            ultrasonic.trigger();

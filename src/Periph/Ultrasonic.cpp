@@ -38,9 +38,9 @@ static ultrasonicArgs_t UltrasonicArgs[Ultrasonics::Size];
 
 Periph::FineTimer s_micros;
 
-
+static const uint32_t MaxEchoTimeMicros = 50000;
 static const uint32_t TriggerPulseWidthMicros = 500;
-static const uint32_t SilenceWidthMicros = TriggerPulseWidthMicros + 1000;
+static const uint32_t SilenceWidthMicros = TriggerPulseWidthMicros + 600;
 
 static const struct {
 	GPIO_TypeDef *port;
@@ -114,13 +114,11 @@ void Ultrasonic::configure(UltrasonicStates::Enum fcn)
 void Ultrasonic::trigger()
 {
 	configure(UltrasonicStates::Trigger);
-
     m_state = UltrasonicStates::Trigger;
 	UltrasonicArgs[m_id].data_ready = false;
 
 	HAL_GPIO_WritePin(config[m_id].port,config[m_id].pin, GPIO_PIN_RESET);
     UltrasonicArgs[m_id].triggerTime = s_micros.read();
-    //TRACE("Trigger %8llu \n\r", s_micros.read());
 }
 
 void Ultrasonic::update()
@@ -131,12 +129,14 @@ void Ultrasonic::update()
 
 	}
 
+    if(s_micros.read() > (UltrasonicArgs[m_id].triggerTime + MaxEchoTimeMicros) && m_state == UltrasonicStates::Echo) {
+        if(!UltrasonicArgs[m_id].data_ready)
+            trigger();
+    }
 
 	if(m_state == UltrasonicStates::Trigger) {
 		if(s_micros.read() > (UltrasonicArgs[m_id].triggerTime + TriggerPulseWidthMicros)) {
-
             HAL_GPIO_WritePin(config[m_id].port, config[m_id].pin, GPIO_PIN_SET);
-//            TRACE("%d \n\r", (uint32_t)(s_micros.read()-UltrasonicArgs[m_id].triggerTime));
             m_state = UltrasonicStates::Silent;
         }
     }
@@ -175,13 +175,11 @@ static void UltrasonicHandler(Ultrasonics::Enum id)
             UltrasonicArgs[id].echoTime = s_micros.read();
             //UltrasonicArgs[id].data_ready = true;
             UltrasonicArgs[id].last_edge = current_edge;
-//            TRACE("F\n\r");
         }
         if (UltrasonicArgs[id].last_edge == Periph::Edges::Falling && current_edge == Periph::Edges::Rising) {
             UltrasonicArgs[id].endTime = s_micros.read();
             UltrasonicArgs[id].data_ready = true;
             UltrasonicArgs[id].last_edge = current_edge;
-//            TRACE("R\n\r");
         }
    }
 }
@@ -239,12 +237,12 @@ extern "C" void EXTI4_IRQHandler(void)
 
 extern "C" void EXTI9_5_IRQHandler(void)
 {
-//	TRACE("EXTI9_5_IRQHandler\n\r");
-
 	if(__HAL_GPIO_EXTI_GET_FLAG(GPIO_PIN_8)){
 
 		UltrasonicHandler(Ultrasonics::Ultrasonic1);
+        TRACE("E\n\r");
 	}
+
 	HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_8);
 }
 
