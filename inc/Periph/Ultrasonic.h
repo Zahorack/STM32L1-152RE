@@ -60,6 +60,8 @@ typedef struct {
 typedef struct {
     uint32_t echoInterval[UltrasonicWaves::Size];
     uint32_t pulseInterval[UltrasonicWaves::Size];
+    uint32_t closestEchoIndex;
+    uint32_t strongestEchoIndex;
 }ultrasonicResult_t;
 
 
@@ -106,7 +108,7 @@ public:
 	void trigger();
 	bool available();
 
-	Container::Result<ultrasonicResult_t> read();
+	Container::Result<Periph::ultrasonicResult_t> read();
 
 
 };

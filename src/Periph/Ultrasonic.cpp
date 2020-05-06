@@ -69,21 +69,21 @@ Ultrasonic::Ultrasonic(Ultrasonics::Enum id):
 void Ultrasonic::initRcc()
 {
     if(config[m_id].port == GPIOA)
-                __GPIOA_CLK_ENABLE();
+        __GPIOA_CLK_ENABLE();
     else if(config[m_id].port == GPIOB)
-                __GPIOB_CLK_ENABLE();
+        __GPIOB_CLK_ENABLE();
     else if(config[m_id].port == GPIOC)
-                __GPIOC_CLK_ENABLE();
+        __GPIOC_CLK_ENABLE();
     else if(config[m_id].port == GPIOD)
-                __GPIOD_CLK_ENABLE();
+        __GPIOD_CLK_ENABLE();
     else if(config[m_id].port == GPIOE)
-                __GPIOE_CLK_ENABLE();
+        __GPIOE_CLK_ENABLE();
     else if(config[m_id].port == GPIOF)
-                __GPIOF_CLK_ENABLE();
+        __GPIOF_CLK_ENABLE();
     else if(config[m_id].port == GPIOG)
-                __GPIOG_CLK_ENABLE();
+        __GPIOG_CLK_ENABLE();
     else if(config[m_id].port == GPIOH)
-                __GPIOH_CLK_ENABLE();
+        __GPIOH_CLK_ENABLE();
 }
 
 void Ultrasonic::configure(UltrasonicStates::Enum fcn)
@@ -168,7 +168,7 @@ void Ultrasonic::evaluate(Container::Result<ultrasonicResult_t> *data, Ultrasoni
     }
 }
 
-Container::Result<ultrasonicResult_t> Ultrasonic::read()
+Container::Result<Periph::ultrasonicResult_t> Ultrasonic::read()
 {
 	Container::Result<ultrasonicResult_t> result;
 
@@ -176,6 +176,19 @@ Container::Result<ultrasonicResult_t> Ultrasonic::read()
         for(int i = UltrasonicWaves::Echo1; i < UltrasonicWaves::Size; i++) {
             evaluate(&result, static_cast<UltrasonicWaves::Enum>(i));
         }
+
+        result.value.closestEchoIndex = UltrasonicWaves::Echo1;
+        result.value.strongestEchoIndex =  UltrasonicWaves::Echo1;
+
+        for(int i = UltrasonicWaves::Echo1; i < UltrasonicWaves::Size; i++) {
+            /* Find closest echo */
+            if(result.value.echoInterval[i] && result.value.echoInterval[i] < result.value.echoInterval[result.value.closestEchoIndex])
+                result.value.closestEchoIndex = i;
+            /* Find strongest echo */
+            if(result.value.pulseInterval[i] > result.value.pulseInterval[result.value.strongestEchoIndex])
+                result.value.strongestEchoIndex = i;
+        }
+
         return result;
 	}
 	return Container::Result<ultrasonicResult_t>();
