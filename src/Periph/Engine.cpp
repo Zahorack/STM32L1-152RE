@@ -37,7 +37,7 @@ static bool directionToPin(Dirs::Enum direction)
 	return direction == Dirs::Backward ? true : false;
 }
 
-static constexpr struct {
+static const struct {
 	GPIO_TypeDef *port;
 	uint16_t id;
 } DirPinsConfig[Engines::Size]= {

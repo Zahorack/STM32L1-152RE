@@ -9,33 +9,16 @@
 #include "Util/Trace.h"
 #include "Periph/FineTimer.h"
 
+
+/*
+ *  Prowave ultrasonic module SRM400 based on PW0268 chip
+ */
+
 namespace Periph {
-
-typedef struct {
-        float x_est_last = 0;
-        float P_last = 0;
-} kalmanArgs_t;
-
-namespace Edges {
-    enum  Enum : uint8_t {
-        Rising = 0,
-        Falling
-    };
-}
-
-typedef struct {
-	bool data_ready;
-	Edges::Enum last_edge;
-    uint64_t triggerTime;
-    wavesArgs_t waves[UltrasonicWaves::Size];
-    uint8_t waveIndex;
-	kalmanArgs_t kalman_args;
-} ultrasonicArgs_t;
-
 
 static ultrasonicArgs_t UltrasonicArgs[Ultrasonics::Size];
 
-Periph::FineTimer s_micros;
+static Periph::FineTimer s_micros;
 
 static const uint32_t MaxEchoTimeMicros = 50000;
 static const uint32_t TriggerPulseWidthMicros = 500;
@@ -47,15 +30,30 @@ static const struct {
 	IRQn_Type Irs;
 } config[Ultrasonics::Size]= {
 	{/* Ultrasonic1 */
-			port: GPIOA,
-			pin: GPIO_PIN_8,
-			Irs: EXTI9_5_IRQn,
+        port: GPIOC,
+        .pin =  GPIO_PIN_0,
+        .Irs =  EXTI0_IRQn,
 	},
-	{/* Ultrasonic2 */
-			port: GPIOB,
-			.pin =  GPIO_PIN_10,
-			.Irs =  EXTI15_10_IRQn,
-	}
+    {/* Ultrasonic2 */
+        port: GPIOC,
+        .pin =  GPIO_PIN_1,
+        .Irs =  EXTI1_IRQn,
+    },
+    {/* Ultrasonic3 */
+        port: GPIOC,
+        .pin =  GPIO_PIN_2,
+        .Irs =  EXTI2_IRQn,
+    },
+    {/* Ultrasonic4 */
+        port: GPIOC,
+        .pin =  GPIO_PIN_3,
+        .Irs =  EXTI3_IRQn,
+    },
+    {/* Ultrasonic5 */
+        port: GPIOC,
+        .pin =  GPIO_PIN_4,
+        .Irs =  EXTI4_IRQn,
+    },
 };
 
 Ultrasonic::Ultrasonic(Ultrasonics::Enum id):
@@ -183,6 +181,12 @@ Container::Result<ultrasonicResult_t> Ultrasonic::read()
 	return Container::Result<ultrasonicResult_t>();
 }
 
+bool Ultrasonic::available()
+{
+    return UltrasonicArgs[m_id].data_ready == true;
+}
+
+
 static void UltrasonicHandler(Ultrasonics::Enum id)
 {
 	Periph::Edges::Enum current_edge = HAL_GPIO_ReadPin(Periph::config[id].port, Periph::config[id].pin) ? Periph::Edges::Rising : Periph::Edges::Falling;
@@ -206,19 +210,13 @@ static void UltrasonicHandler(Ultrasonics::Enum id)
             }
         }
    }
-
-}
-
-bool Ultrasonic::available()
-{
-    return UltrasonicArgs[m_id].data_ready == true;
 }
 
 
 extern "C" void EXTI0_IRQHandler(void)
 {
 	if(__HAL_GPIO_EXTI_GET_FLAG(GPIO_PIN_0)){
-		TRACE("EXTI0_IRQHandler\r\n");
+        UltrasonicHandler(Ultrasonics::Ultrasonic1);
 	}
 	HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_0);
 }
@@ -226,7 +224,7 @@ extern "C" void EXTI0_IRQHandler(void)
 extern "C" void EXTI1_IRQHandler(void)
 {
 	if(__HAL_GPIO_EXTI_GET_FLAG(GPIO_PIN_1)){
-		TRACE("EXTI0_IRQHandler\r\n");
+        UltrasonicHandler(Ultrasonics::Ultrasonic2);
 	}
 	HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_1);
 }
@@ -234,7 +232,7 @@ extern "C" void EXTI1_IRQHandler(void)
 extern "C" void EXTI2_IRQHandler(void)
 {
 	if(__HAL_GPIO_EXTI_GET_FLAG(GPIO_PIN_2)){
-		TRACE("EXTI0_IRQHandler\r\n");
+        UltrasonicHandler(Ultrasonics::Ultrasonic3);
 	}
 	HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_2);
 }
@@ -242,7 +240,7 @@ extern "C" void EXTI2_IRQHandler(void)
 extern "C" void EXTI3_IRQHandler(void)
 {
 	if(__HAL_GPIO_EXTI_GET_FLAG(GPIO_PIN_3)){
-		TRACE("EXTI0_IRQHandler\r\n");
+        UltrasonicHandler(Ultrasonics::Ultrasonic4);
 	}
 	HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_3);
 }
@@ -250,7 +248,7 @@ extern "C" void EXTI3_IRQHandler(void)
 extern "C" void EXTI4_IRQHandler(void)
 {
 	if(__HAL_GPIO_EXTI_GET_FLAG(GPIO_PIN_4)){
-		TRACE("EXTI0_IRQHandler\r\n");
+        UltrasonicHandler(Ultrasonics::Ultrasonic5);
 	}
 	HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_4);
 }
@@ -258,17 +256,9 @@ extern "C" void EXTI4_IRQHandler(void)
 extern "C" void EXTI9_5_IRQHandler(void)
 {
 	if(__HAL_GPIO_EXTI_GET_FLAG(GPIO_PIN_8)){
-		UltrasonicHandler(Ultrasonics::Ultrasonic1);
+
 	}
 	HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_8);
-}
-
-extern "C" void EXTI15_10_IRQHandler(void)
-{
-	if(__HAL_GPIO_EXTI_GET_FLAG(GPIO_PIN_15)){
-
-	}
-	HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_15);
 }
 
 

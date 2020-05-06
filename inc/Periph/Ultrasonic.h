@@ -62,6 +62,29 @@ typedef struct {
     uint32_t pulseInterval[UltrasonicWaves::Size];
 }ultrasonicResult_t;
 
+
+typedef struct {
+    float x_est_last = 0;
+    float P_last = 0;
+} kalmanArgs_t;
+
+namespace Edges {
+    enum  Enum : uint8_t {
+        Rising = 0,
+        Falling
+    };
+}
+
+typedef struct {
+    bool data_ready;
+    Edges::Enum last_edge;
+    uint64_t triggerTime;
+    wavesArgs_t waves[UltrasonicWaves::Size];
+    uint8_t waveIndex;
+    kalmanArgs_t kalman_args;
+} ultrasonicArgs_t;
+
+
 class Ultrasonic {
 
 	const Ultrasonics::Enum m_id;

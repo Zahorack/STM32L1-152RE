@@ -20,9 +20,12 @@ Application::ApplicationInitializator::ApplicationInitializator(Application *par
 Application::Application() :
 	m_applicationInitializator(this),
 	logger(&usartLog),
-	usartLog(Periph::Usarts::Usart3, 576000),
+	usartLog(Periph::Usarts::Usart3, 9600),
+
+
 	m_appRunningLed(Periph::Leds::Green),
-	ultrasonic(Periph::Ultrasonics::Ultrasonic1)
+	ultrasonic(Periph::Ultrasonics::Ultrasonic1),
+	ping(Periph::JSNSR04_Sensors::Sensor1)
 {
 	HAL_Init();
 	SystemCoreClockUpdate();
@@ -38,12 +41,9 @@ void Application::run()
 	Util::Timer timer(Util::Time::FromMilliSeconds(1000));
 	timer.start();
 
-
-	ultrasonic.trigger();
-
 	/* @non-terminating@ */
 	for(;;) {
-//
+
 //		Container::Result<Control::Packet> communicationResult = communication.update();
 //
 //		if(communicationResult.isValid && communicationResult.value.header.type == Control::PacketType::ManualControl)
@@ -62,39 +62,43 @@ void Application::run()
 //		bms.update();
 
 
+        ping.update();
 
-
-        ultrasonic.update();
-
-
-
-		if(timer.run()) {
-            if(ultrasonic.available() == true) {
-                Container::Result<Periph::ultrasonicResult_t> result = ultrasonic.read();
-
-                for(int i = 0; i < Periph::UltrasonicWaves::Size; i++) {
-                    TRACE("echo: %d   ", result.value.echoInterval[i]);
-                    TRACE("pulse: %d \n", result.value.pulseInterval[i]);
-                }
-                TRACE("\n");
-                ultrasonic.trigger();
+        if(timer.run()) {
+            TRACE("Trigger\n\r");
+            if (ping.available()) {
+                Container::Result<Periph::jsnsr04Result_t> result = ping.read();
+                    TRACE("echo: %d   ", result.value.echoInterval);
+                    TRACE("pulse: %d \n", result.value.pulseInterval);
             }
+            ping.trigger();
+        }
 
-
-//            TRACE("echo: %d \n\r", ultrasonic.read().value);
-//            ultrasonic.trigger();
-			//communication.sendStatus();
-			//communication.sendStatus();
-			//INF_LOG("Tick");
-			//TRACE("Tick\n\r");
-		}
-
-		static uint64_t last_micros = 0;
+//        ultrasonic.update();
+//		if(timer.run()) {
+//		    TRACE("Trig\n\r");
+//            if (ultrasonic.available() == true) {
+//                Container::Result<Periph::ultrasonicResult_t> result = ultrasonic.read();
 //
-//		if(finetimer.read() > (last_micros + 100000)) {
-//			TRACE("Second\n\r");
-//			last_micros = finetimer.read();
+//                for (int i = 0; i < Periph::UltrasonicWaves::Size; i++) {
+//                    TRACE("echo: %d   ", result.value.echoInterval[i]);
+//                    TRACE("pulse: %d \n", result.value.pulseInterval[i]);
+//                }
+//                TRACE("\n");
+//
+//            }
+//            ultrasonic.trigger();
+//        }
+//
+//
+////            TRACE("echo: %d \n\r", ultrasonic.read().value);
+////            ultrasonic.trigger();
+//			//communication.sendStatus();
+//			//communication.sendStatus();
+//			//INF_LOG("Tick");
+//			//TRACE("Tick\n\r");
 //		}
+
 	}
 	INF_LOG("Application ended.");
 

@@ -144,7 +144,8 @@ namespace Periph
 				.OCFastMode = TIM_OCFAST_DISABLE,
 		};
 
-		HAL_TIM_PWM_ConfigChannel(&htim[timer], &init, TIM_CHANNEL_1);
+
+        HAL_TIM_PWM_ConfigChannel(&htim[timer], &init, TIM_CHANNEL_1);
 		HAL_TIM_PWM_ConfigChannel(&htim[timer], &init, TIM_CHANNEL_2);
 		HAL_TIM_PWM_ConfigChannel(&htim[timer], &init, TIM_CHANNEL_3);
 		HAL_TIM_PWM_ConfigChannel(&htim[timer], &init, TIM_CHANNEL_4);

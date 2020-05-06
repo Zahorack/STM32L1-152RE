@@ -29,7 +29,7 @@ struct {
 	uint8_t gpioAf;
 	USART_TypeDef *usart;
 	IRQn_Type irqn;
-} constexpr config[Usarts::Size] = {
+} const config[Usarts::Size] = {
 	/* Usart1 */ {
 		gpio: GPIOA,
 		rx: GPIO_PIN_10,
