@@ -21,11 +21,10 @@ Application::Application() :
 	m_applicationInitializator(this),
 	logger(&usartLog),
 	usartLog(Periph::Usarts::Usart3, 9600),
-
-
 	m_appRunningLed(Periph::Leds::Green),
-	ultrasonic(Periph::Ultrasonics::Ultrasonic4),
-	ping(Periph::JSNSR04_Sensors::Sensor1)
+
+	ultrasonic(Periph::Ultrasonics::Ultrasonic4)
+
 {
 	HAL_Init();
 	SystemCoreClockUpdate();
@@ -63,46 +62,66 @@ void Application::run()
 		bms.update();
 
 
-        ping.update();
+//		sonar.update();
+//		if(timer.run()) {
+//
+//            if(sonar.singleBeamUltrasonic.available()) {
+//                Container::Result<Periph::jsnsr04Result_t> res = sonar.singleBeamUltrasonic.read();
+//                TRACE("single beam: %d\n\r", res.value.echoInterval);
+//            }
+//
+//		    if (sonar.available()) {
+//		        Container::Result<Util::sonarResult_t> result = sonar.read();
+//
+//                for (int i = 0; i < Periph::Ultrasonics::Size; i++) {
+//                    uint32_t strongestIndex = result.value.ultrasonicsResults[i].value.strongestEchoIndex;
+//                    uint32_t closestIndex = result.value.ultrasonicsResults[i].value.closestEchoIndex;
+//
+//                    TRACE("[%d] closest: %d   ",i,  result.value.ultrasonicsResults[i].value.echoInterval[closestIndex]);
+//                    TRACE("strongest: %d \n", result.value.ultrasonicsResults[i].value.echoInterval[strongestIndex]);
+//                }
+//                TRACE("\n\r");
+//		    }
+//		    sonar.sequencedTrigger();
+//
+//		}
+
+
+
+
+
         ultrasonic.update();
 
-		if(timer.run()) {
+        if (timer.run()) {
             main_cnt++;
-		    TRACE("Trig\n\r");
-            if(main_cnt%2 == 0) {
+            if (main_cnt % 2 == 0) {
                 if (ultrasonic.available() == true) {
                     Container::Result<Periph::ultrasonicResult_t> result = ultrasonic.read();
                     for (int i = 0; i < Periph::UltrasonicWaves::Size; i++) {
                         TRACE("echo: %d   ", result.value.echoInterval[i]);
                         TRACE("pulse: %d \n", result.value.pulseInterval[i]);
+
                     }
+                    TRACE(" closest: %d   ", result.value.echoInterval[result.value.closestEchoIndex]);
+                    TRACE("strongest: %d \n", result.value.echoInterval[result.value.strongestEchoIndex]);
                     TRACE("\n");
                 }
 
                 ultrasonic.trigger();
             }
-            else {
-                if (ping.available()) {
-                    Container::Result<Periph::jsnsr04Result_t> result = ping.read();
-                    TRACE("echo: %d   ", result.value.echoInterval);
-                    TRACE("pulse: %d \n", result.value.pulseInterval);
-                }
-
-                ping.trigger();
-            }
         }
-//
-//
-////            TRACE("echo: %d \n\r", ultrasonic.read().value);
-////            ultrasonic.trigger();
+
+
+
+
+
 //			//communication.sendStatus();
 //			//communication.sendStatus();
 //			//INF_LOG("Tick");
 //			//TRACE("Tick\n\r");
-//		}
 
-	}
-	INF_LOG("Application ended.");
+        }
+        INF_LOG("Application ended.");
 
 
 }

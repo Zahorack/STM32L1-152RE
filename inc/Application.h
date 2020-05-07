@@ -19,7 +19,7 @@
 #include "Periph/AdcIT.h"
 #include "Periph/FineTimer.h"
 #include "Periph/Ultrasonic.h"
-#include "Periph/JSNSR04.h"
+#include "Util/Sonar.h"
 
 
 #include "Control/Control.h"
@@ -43,7 +43,8 @@ public:
 	Util::Communication communication;
 	Util::Bms bms;
 	Periph::Ultrasonic ultrasonic;
-	Periph::JSNRS04 ping;
+
+//	Util::Sonar sonar;
 
 private:
 	Periph::Led m_appRunningLed;

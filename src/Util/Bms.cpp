@@ -18,7 +18,7 @@ static float KalmanFilter(float z_measured);
 
 namespace Battery {
 /* 	3s Lithium polymer
- * 	50C -->> 250A discahrge current
+ * 	50C 
  * 	5000mAh // 55Wh
  */
 	static const float FullChargeVoltage = 12.6;

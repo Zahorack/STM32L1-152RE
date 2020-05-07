@@ -48,6 +48,12 @@ enum Enum : uint8_t {
     Echo7,
     Echo8,
     Echo9,
+    Echo10,
+    Echo11,
+    Echo12,
+    Echo13,
+    Echo14,
+    Echo15,
 
     Size
 };
@@ -98,13 +104,14 @@ class Ultrasonic {
 	void initRcc();
 
 	void evaluate(Container::Result<ultrasonicResult_t> *, UltrasonicWaves::Enum);
-
+    void enableInterrupts();
 public:
 	Ultrasonic(Ultrasonics::Enum id);
 
 	void update();
 	void configure(UltrasonicStates::Enum fcn);
 
+	void listen();
 	void trigger();
 	bool available();
 

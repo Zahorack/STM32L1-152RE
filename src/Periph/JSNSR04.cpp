@@ -143,8 +143,8 @@ Container::Result<jsnsr04Result_t> JSNRS04::read()
     Container::Result<jsnsr04Result_t> result;
 
     if(available()){
-        result.value.echoInterval =  (uint32_t)(UltrasonicArgs[m_id].waves[0].echoTime - UltrasonicArgs[m_id].triggerTime);
-        result.value.pulseInterval =  (uint32_t)(UltrasonicArgs[m_id].waves[0].endTime - UltrasonicArgs[m_id].waves[0].echoTime);
+        //result.value.echoInterval =  (uint32_t)(UltrasonicArgs[m_id].waves[0].echoTime - UltrasonicArgs[m_id].triggerTime);
+        result.value.echoInterval =  (uint32_t)(UltrasonicArgs[m_id].waves[0].endTime - UltrasonicArgs[m_id].waves[0].echoTime);
         return result;
     }
     return Container::Result<jsnsr04Result_t>();

@@ -12,7 +12,6 @@ namespace Periph {
 
 typedef struct {
     uint32_t echoInterval;
-    uint32_t pulseInterval;
 }jsnsr04Result_t;
 
 namespace JSNSR04_Sensors {

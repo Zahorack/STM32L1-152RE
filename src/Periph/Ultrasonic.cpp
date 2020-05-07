@@ -20,9 +20,9 @@ static ultrasonicArgs_t UltrasonicArgs[Ultrasonics::Size];
 
 static Periph::FineTimer s_micros;
 
-static const uint32_t MaxEchoTimeMicros = 50000;
+static const uint32_t MaxEchoTimeMicros = 30000;
 static const uint32_t TriggerPulseWidthMicros = 500;
-static const uint32_t SilenceWidthMicros = TriggerPulseWidthMicros + 600;
+static const uint32_t SilenceWidthMicros = TriggerPulseWidthMicros + 1500;
 
 static const struct {
 	GPIO_TypeDef *port;
@@ -86,6 +86,11 @@ void Ultrasonic::initRcc()
         __GPIOH_CLK_ENABLE();
 }
 
+void Ultrasonic::enableInterrupts() {
+    HAL_NVIC_SetPriority(config[m_id].Irs, 1, 0);
+    HAL_NVIC_EnableIRQ(config[m_id].Irs);
+}
+
 void Ultrasonic::configure(UltrasonicStates::Enum fcn)
 {
 	GPIO_InitTypeDef init;
@@ -94,8 +99,9 @@ void Ultrasonic::configure(UltrasonicStates::Enum fcn)
 	if(fcn == UltrasonicStates::Echo) {
 		init.Mode = 	GPIO_MODE_IT_RISING_FALLING;
 		init.Pull = 	GPIO_PULLUP;
-		HAL_NVIC_SetPriority(config[m_id].Irs, 1, 0);
-		HAL_NVIC_EnableIRQ(config[m_id].Irs);
+//		HAL_NVIC_SetPriority(config[m_id].Irs, 1, 0);
+//		HAL_NVIC_EnableIRQ(config[m_id].Irs);
+        HAL_NVIC_DisableIRQ(config[m_id].Irs);
 	}
 	else if(fcn == UltrasonicStates::Trigger) {
 		init.Mode = 	GPIO_MODE_OUTPUT_OD;
@@ -118,6 +124,15 @@ void Ultrasonic::trigger()
     UltrasonicArgs[m_id].triggerTime = s_micros.read();
 }
 
+void Ultrasonic::listen() {
+    configure(UltrasonicStates::Echo);
+    m_state = UltrasonicStates::Silent;
+    UltrasonicArgs[m_id].data_ready = false;
+    UltrasonicArgs[m_id].waveIndex = UltrasonicWaves::Echo1;
+
+    UltrasonicArgs[m_id].triggerTime = s_micros.read();
+}
+
 void Ultrasonic::update()
 {
     s_micros.update();
@@ -126,32 +141,28 @@ void Ultrasonic::update()
 
 	}
 
-    if(UltrasonicArgs[m_id].data_ready == true) {
-        configure(UltrasonicStates::Trigger);
-    }
-
     if(m_state == UltrasonicStates::Trigger) {
 		if(s_micros.read() > (UltrasonicArgs[m_id].triggerTime + TriggerPulseWidthMicros)) {
             HAL_GPIO_WritePin(config[m_id].port, config[m_id].pin, GPIO_PIN_SET);
             m_state = UltrasonicStates::Silent;
+
+            configure(UltrasonicStates::Echo);
         }
     }
     else if(m_state == UltrasonicStates::Silent) {
         if (s_micros.read() > (UltrasonicArgs[m_id].triggerTime + SilenceWidthMicros)) {
             m_state = UltrasonicStates::Echo;
-            configure(UltrasonicStates::Echo);
+            enableInterrupts();
         }
     }
     else if(m_state == UltrasonicStates::Echo) {
         if (!available() && s_micros.read() > (UltrasonicArgs[m_id].triggerTime + MaxEchoTimeMicros)) {
-            if (UltrasonicArgs[m_id].waveIndex == UltrasonicWaves::Echo1)
-                trigger();
-
-            else if (UltrasonicArgs[m_id].waveIndex > UltrasonicWaves::Echo1) {
-                UltrasonicArgs[m_id].data_ready = true;
-                //m_state = UltrasonicStates::None;
-                TRACE("wi %d\n\r", UltrasonicArgs[m_id].waveIndex);
-            }
+            UltrasonicArgs[m_id].data_ready = true;
+//            if (UltrasonicArgs[m_id].waveIndex == UltrasonicWaves::Echo1)
+//                trigger();
+//            else if (UltrasonicArgs[m_id].waveIndex > UltrasonicWaves::Echo1) {
+//                UltrasonicArgs[m_id].data_ready = true;
+//            }
         }
     }
 }
