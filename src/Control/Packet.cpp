@@ -36,7 +36,8 @@ namespace Control
 			sizeof(ManualControlPacket),
 			0 /*sizeof(OpenLeftFeederPacket)*/,
 			0 /*sizeof(OpenRightFeederPacket)*/,
-			sizeof(ManualCalibrationPacket)
+			sizeof(ManualCalibrationPacket),
+            sizeof(SingleBeamSonarData)
 
 	};
 

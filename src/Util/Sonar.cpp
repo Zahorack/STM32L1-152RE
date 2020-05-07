@@ -79,6 +79,15 @@ bool Sonar::available() {
     return result;
 }
 
+bool Sonar::available(Periph::Ultrasonics::Enum id) {
+
+    return m_ultrasonics[id].available();
+}
+
+Container::Result<Periph::ultrasonicResult_t> Sonar::read(Periph::Ultrasonics::Enum id) {
+    return m_ultrasonics[id].read();
+}
+
 Container::Result<sonarResult_t> Sonar::read() {
 
     Container::Result<sonarResult_t> result;

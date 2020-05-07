@@ -26,7 +26,6 @@ namespace Control
 	{
 		enum Enum : uint8_t {
 			ManualMode = 0,
-
 			Stopped,
 
 			Size

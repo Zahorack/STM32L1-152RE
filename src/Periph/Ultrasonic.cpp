@@ -63,6 +63,7 @@ Ultrasonic::Ultrasonic(Ultrasonics::Enum id):
 {
     initRcc();
 	configure(UltrasonicStates::Trigger);
+    UltrasonicArgs[id].data_ready = false;
 	m_timer.start();
 }
 

@@ -44,12 +44,14 @@ public:
 
     void update();
     bool available();
+    bool available(Periph::Ultrasonics::Enum);
 
     void trigger(Periph::Ultrasonics::Enum);
     void trigger();
 
     void sequencedTrigger();
 
+    Container::Result<Periph::ultrasonicResult_t> read(Periph::Ultrasonics::Enum);
     Container::Result<sonarResult_t> read();
 };
 

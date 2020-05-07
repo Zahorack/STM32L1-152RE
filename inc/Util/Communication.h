@@ -18,7 +18,8 @@
 
 namespace Util
 {
-	class Communication {
+class Communication {
+    private:
 		Periph::Usart m_rfModule;
 		uint32_t m_transmitID = 0;
 		uint32_t m_receiveID = 0;
@@ -42,10 +43,9 @@ namespace Util
 		void sendAck();
 		void sendNack();
 		void send(Control::PacketType::Enum type);
-
 		void send(Control::Packet);
 
-
+        void sendSingleBeamSonarData(Control::SingleBeamSonarData);
 
 	private:
 		void waitForNextPacket();

@@ -150,6 +150,7 @@ namespace Util
 	void Communication::sendHeader(Control::PacketHeader header)
 	{
 		m_rfModule.write((uint8_t*)&Control::PacketMark, 2);
+
 		m_rfModule.writeStruct(header);
 		m_rfModule.write(Control::Packet::CalculateCRC8(header));
 	}
@@ -213,6 +214,16 @@ namespace Util
 
 		send(status);
 
+	}
+
+    void Communication::sendSingleBeamSonarData(Control::SingleBeamSonarData data) {
+	    Control::Packet packet;
+
+	    packet.header.id = m_transmitID++;
+	    packet.header.type = Control::PacketType::SingleBeamSonarData;
+
+	    packet.contents.singleBeamPacket = data;
+	    send(packet);
 	}
 
 }

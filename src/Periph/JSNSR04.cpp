@@ -44,8 +44,7 @@ JSNRS04::JSNRS04(JSNSR04_Sensors::Enum id):
     TRACE("init sensor 1\n");
     initRcc();
     initGpio();
-
-
+    UltrasonicArgs[id].data_ready = false;
 }
 
 

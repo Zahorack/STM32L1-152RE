@@ -42,9 +42,7 @@ public:
 
 	Util::Communication communication;
 	Util::Bms bms;
-	Periph::Ultrasonic ultrasonic;
-
-//	Util::Sonar sonar;
+	Util::Sonar sonar;
 
 private:
 	Periph::Led m_appRunningLed;
