@@ -47,6 +47,8 @@ class Communication {
 
         void sendSingleBeamSonarData(Control::SingleBeamSonarData);
 
+        void sendSonarData(Control::SonarData);
+
 	private:
 		void waitForNextPacket();
 		void readPacketHeader();

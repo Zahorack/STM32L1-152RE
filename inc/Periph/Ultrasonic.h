@@ -49,11 +49,6 @@ enum Enum : uint8_t {
     Echo8,
     Echo9,
     Echo10,
-    Echo11,
-    Echo12,
-    Echo13,
-    Echo14,
-    Echo15,
 
     Size
 };

@@ -12,6 +12,18 @@
 
 /*
  *  Prowave ultrasonic module SRM400 based on PW0268 chip
+ *
+ *  Hardware upgrade:
+ *      VR2 = 7.7 kOhm
+ *      VR1 = 340 Ohm
+ *      R12 = 82 kOhm
+ *
+ *  VR1 - to sense resonating frequency
+ *  VR2 - to change echo sensitivity
+ *  Clock frequency has to effect max echo listening time. Configurable with R12.
+ *
+ *  Estimated clock frequency F = (10000/max_echo) = (10000/28ms) = 357 kHz
+ *  Max trigger pulse = 400/F = 400/357 = 1.12 ms
  */
 
 namespace Periph {
@@ -21,8 +33,8 @@ static ultrasonicArgs_t UltrasonicArgs[Ultrasonics::Size];
 static Periph::FineTimer s_micros;
 
 static const uint32_t MaxEchoTimeMicros = 30000;
-static const uint32_t TriggerPulseWidthMicros = 500;
-static const uint32_t SilenceWidthMicros = TriggerPulseWidthMicros + 1500;
+static const uint32_t TriggerPulseWidthMicros = 900;
+static const uint32_t SilenceWidthMicros = TriggerPulseWidthMicros + 1000;
 
 static const struct {
 	GPIO_TypeDef *port;
@@ -146,7 +158,6 @@ void Ultrasonic::update()
 		if(s_micros.read() > (UltrasonicArgs[m_id].triggerTime + TriggerPulseWidthMicros)) {
             HAL_GPIO_WritePin(config[m_id].port, config[m_id].pin, GPIO_PIN_SET);
             m_state = UltrasonicStates::Silent;
-
             configure(UltrasonicStates::Echo);
         }
     }

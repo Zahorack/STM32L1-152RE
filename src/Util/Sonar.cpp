@@ -5,6 +5,10 @@
 #include "Util/Sonar.h"
 #include "Util/Trace.h"
 
+//TODO:
+// Ultrasonic listen NOT WORKING!
+// Wave forming vs sequence trigger
+
 namespace Util {
 
 static uint32_t SpeedOfSoundINWater = 1480;
@@ -36,13 +40,13 @@ void Sonar::update() {
         }
     }
 
-    if(m_timer.run()) {
-        if (available()) {
-            if (singleBeamUltrasonic.available()) {
-                singleBeamUltrasonic.trigger();
-            }
-        }
-    }
+//    if(m_timer.run()) {
+//        if (available()) {
+//            if (singleBeamUltrasonic.available()) {
+//                singleBeamUltrasonic.trigger();
+//            }
+//        }
+//    }
 
     /* Updates */
     for(int i = 0; i < Periph::Ultrasonics::Size; i++) {
@@ -53,14 +57,15 @@ void Sonar::update() {
 
 void Sonar::trigger(Periph::Ultrasonics::Enum id) {
 
-    for(int i = 0; i < Periph::Ultrasonics::Size; i++) {
-        if(i == static_cast<int>(id)) {
-            m_ultrasonics[id].trigger();
-        }
-        else
-            m_ultrasonics[i].listen();
-    }
+    m_ultrasonics[id].trigger();
 
+//    for(int i = 0; i < Periph::Ultrasonics::Size; i++) {
+//        if(i == static_cast<int>(id)) {
+//            m_ultrasonics[id].trigger();
+//        }
+//        else
+//            m_ultrasonics[i].listen();
+//    }
 }
 
 void Sonar::trigger() {
@@ -108,6 +113,10 @@ void Sonar::sequencedTrigger() {
     m_ultrasonics[sequenceIndex].trigger();
 }
 
+void Sonar::listen(Periph::Ultrasonics::Enum id) {
+
+    m_ultrasonics[id].listen();
+}
 
 
 }

@@ -9,6 +9,7 @@
 #define CONTROL_PACKET_H_
 
 #include "stm32l1xx.h"
+#include "Periph/Ultrasonic.h"
 
 namespace Control
 {
@@ -24,7 +25,9 @@ namespace Control
 			OpenLeftFeeder,
 			OpenRightFeeder,
 			ManualCalibration,
-			SingleBeamSonarData
+			SingleBeamSonarData,
+			UltrasonicData,
+			SonarData
 		};
 	}
 
@@ -58,7 +61,16 @@ namespace Control
 	};
 
     struct __attribute__((packed)) SingleBeamSonarData {
-        uint32_t echoInterval;
+        uint16_t echoInterval;
+    };
+
+    struct __attribute__((packed)) UltrasonicData {
+        uint16_t closestEcho;
+        uint16_t strongestEcho;
+    };
+
+    struct __attribute__((packed)) SonarData {
+        UltrasonicData ultrasonic[Periph::Ultrasonics::Size];
     };
 
 	struct __attribute__((packed)) ManualCalibrationPacket {
@@ -77,6 +89,8 @@ namespace Control
 		ManualControlPacket dataPacket;
 		ManualCalibrationPacket calibrationPacket;
 		SingleBeamSonarData singleBeamPacket;
+		UltrasonicData ultrasonicDataPacket;
+		SonarData sonarDataPacket;
 	};
 
 	using Crc = uint8_t;

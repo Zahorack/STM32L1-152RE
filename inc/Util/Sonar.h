@@ -49,6 +49,8 @@ public:
     void trigger(Periph::Ultrasonics::Enum);
     void trigger();
 
+    void listen(Periph::Ultrasonics::Enum);
+
     void sequencedTrigger();
 
     Container::Result<Periph::ultrasonicResult_t> read(Periph::Ultrasonics::Enum);

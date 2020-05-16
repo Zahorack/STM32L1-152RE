@@ -1,7 +1,7 @@
 /*
  * Comunication.cpp
  *
- *  Created on: 2.9. 2018
+ *  Created on: 2.9.2018
  *      Author: Zahorack
  */
 
@@ -72,7 +72,7 @@ namespace Util
 			m_rfModule.readStruct(m_currentPacket.header);
 
 			if(checkHeaderCrc()) {
-				TRACE("<- [%d]\n\r", m_currentPacket.header.type);
+//				TRACE("<- [%d]\n\r", m_currentPacket.header.type);
 				m_state = ReadingPacketContents;
 			}
 			else {
@@ -224,6 +224,16 @@ namespace Util
 
 	    packet.contents.singleBeamPacket = data;
 	    send(packet);
+	}
+
+	void Communication::sendSonarData(Control::SonarData data) {
+        Control::Packet packet;
+
+        packet.header.id = m_transmitID++;
+        packet.header.type = Control::PacketType::SonarData;
+
+        packet.contents.sonarDataPacket = data;
+        send(packet);
 	}
 
 }

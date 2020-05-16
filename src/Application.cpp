@@ -35,7 +35,7 @@ void Application::run()
 
     communication.sendStatus();
 
-	Util::Timer timer(Util::Time::FromMilliSeconds(1000));
+	Util::Timer timer(Util::Time::FromMilliSeconds(500));
 	timer.start();
 	int main_cnt = 0;
 
@@ -65,52 +65,53 @@ void Application::run()
 		sonar.update();
 		if(timer.run()) {
 
-            if(sonar.singleBeamUltrasonic.available()) {
-                Container::Result<Periph::jsnsr04Result_t> res = sonar.singleBeamUltrasonic.read();
-                TRACE("single beam: %d\n\r", res.value.echoInterval);
-
-                Control::SingleBeamSonarData data = {
-                        .echoInterval =  res.value.echoInterval
-                };
-                communication.sendSingleBeamSonarData(data);
-
-            }
-
-
-            if(sonar.available(Periph::Ultrasonics::Ultrasonic4)) {
-                Container::Result<Periph::ultrasonicResult_t> result = sonar.read(Periph::Ultrasonics::Ultrasonic4);
-                for (int i = 0; i < Periph::UltrasonicWaves::Size; i++) {
-                    TRACE("echo: %d   ", result.value.echoInterval[i]);
-                    TRACE("pulse: %d \n", result.value.pulseInterval[i]);
-                }
-                TRACE(" closest: %d   ", result.value.echoInterval[result.value.closestEchoIndex]);
-                TRACE("strongest: %d \n", result.value.echoInterval[result.value.strongestEchoIndex]);
-                TRACE("\n");
-            }
-            sonar.trigger(Periph::Ultrasonics::Ultrasonic4);
-
-//		    if (sonar.available()) {
-//		        Container::Result<Util::sonarResult_t> result = sonar.read();
+//            if(sonar.singleBeamUltrasonic.available()) {
+//                Container::Result<Periph::jsnsr04Result_t> res = sonar.singleBeamUltrasonic.read();
+//                TRACE("single beam: %d\n\r", res.value.echoInterval);
 //
-//                for (int i = 0; i < Periph::Ultrasonics::Size; i++) {
-//                    uint32_t strongestIndex = result.value.ultrasonicsResults[i].value.strongestEchoIndex;
-//                    uint32_t closestIndex = result.value.ultrasonicsResults[i].value.closestEchoIndex;
+//                Control::SingleBeamSonarData data = {
+//                        .echoInterval =  res.value.echoInterval
+//                };
+//                communication.sendSingleBeamSonarData(data);
 //
-//                    TRACE("[%d] closest: %d   ",i,  result.value.ultrasonicsResults[i].value.echoInterval[closestIndex]);
-//                    TRACE("strongest: %d \n", result.value.ultrasonicsResults[i].value.echoInterval[strongestIndex]);
+//            }
+
+
+//            if(sonar.available(Periph::Ultrasonics::Ultrasonic3)) {
+//                Container::Result<Periph::ultrasonicResult_t> result = sonar.read(Periph::Ultrasonics::Ultrasonic3);
+//                for (int i = 0; i < Periph::UltrasonicWaves::Size; i++) {
+//                    TRACE("echo: %d   ", result.value.echoInterval[i]);
+//                    TRACE("pulse: %d \n", result.value.pulseInterval[i]);
 //                }
-//                TRACE("\n\r");
-//		    }
-//		    sonar.sequencedTrigger();
+//                TRACE(" closest: %d   ", result.value.echoInterval[result.value.closestEchoIndex]);
+//                TRACE("strongest: %d \n", result.value.echoInterval[result.value.strongestEchoIndex]);
+//                TRACE("\n");
+//            }
+//            sonar.trigger(Periph::Ultrasonics::Ultrasonic3);
+
+//            sonar.listen(Periph::Ultrasonics::Ultrasonic2);
+
+		    if (sonar.available()) {
+		        Container::Result<Util::sonarResult_t> result = sonar.read();
+                Control::SonarData sonarData;
+
+                for (int i = 0; i < Periph::Ultrasonics::Size; i++) {
+                    uint32_t strongestIndex = result.value.ultrasonicsResults[i].value.strongestEchoIndex;
+                    uint32_t closestIndex = result.value.ultrasonicsResults[i].value.closestEchoIndex;
+                    sonarData.ultrasonic[i].closestEcho = static_cast<uint16_t >(result.value.ultrasonicsResults[i].value.echoInterval[closestIndex]);
+                    sonarData.ultrasonic[i].strongestEcho = static_cast<uint16_t >(result.value.ultrasonicsResults[i].value.echoInterval[strongestIndex]);
+
+                    TRACE("[%d] closest: %d   ",i, sonarData.ultrasonic[i].closestEcho);
+                    TRACE("strongest: %d \n", sonarData.ultrasonic[i].strongestEcho);
+                }
+                TRACE("\n\r");
+
+                communication.sendSonarData(sonarData);
+		    }
+		    sonar.sequencedTrigger();
+
 
 		}
-
-
-
-//			//communication.sendStatus();
-//			//communication.sendStatus();
-//			//INF_LOG("Tick");
-//			//TRACE("Tick\n\r");
 
         }
         INF_LOG("Application ended.");
